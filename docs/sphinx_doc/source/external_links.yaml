@@ -1,0 +1,24 @@
+projects:
+  data-juicer:
+    display_name: "Core"
+    repo_name: "data-juicer"
+    
+  data-juicer-agents:
+    display_name: "Agents"
+    repo_name: "data-juicer-agents"
+    
+  data-juicer-hub:
+    display_name: "Hub"
+    repo_name: "data-juicer-hub"
+  
+  data-juicer-sandbox:
+    display_name: "Sandbox"
+    repo_name: "data-juicer-sandbox"
+
+url_template: "https://datajuicer.github.io/{project}/{language}/{version}/"
+
+link_order:
+  - data-juicer
+  - data-juicer-sandbox
+  - data-juicer-hub
+  - data-juicer-agents

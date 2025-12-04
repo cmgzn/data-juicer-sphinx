@@ -1,0 +1,43 @@
+<div class="navbar-switcher-container">
+  {% if supported_languages %}
+  <div class="navbar-dropdown">
+    <div class="navbar-dropdown-trigger">
+      <span class="dropdown-label">
+        🌐 {{ language }}
+      </span>
+      <i class="fa-solid fa-chevron-down dropdown-icon"></i>
+    </div>
+    <div class="navbar-dropdown-panel">
+      <div class="dropdown-content">
+        {% for lang_code, lang_name in supported_languages.items() %}
+        <a href="{{ pathto('', 1) ~ '../../' ~ get_lang_link(language, pagename, lang_code, non_zh_pages, current_version) }}"
+           class="dropdown-item {% if language == lang_code %}active{% endif %}">
+          {{ lang_name }}
+        </a>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+  {% endif %}
+
+  {% if available_versions %}
+  <div class="navbar-dropdown">
+    <div class="navbar-dropdown-trigger">
+      <span class="dropdown-label">
+        📦 {{ current_version or 'main' }}
+      </span>
+      <i class="fa-solid fa-chevron-down dropdown-icon"></i>
+    </div>
+    <div class="navbar-dropdown-panel">
+      <div class="dropdown-content version-list">
+        {% for v in available_versions %}
+        <a href="{{ pathto('', 1) ~ '../' ~ v ~ '/' ~ pagename ~ '.html' }}"
+           class="dropdown-item {% if v == current_version %}active{% endif %}">
+          {{ v }}
+        </a>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+  {% endif %}
+</div>
