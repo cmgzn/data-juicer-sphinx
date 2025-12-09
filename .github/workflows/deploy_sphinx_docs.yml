@@ -40,16 +40,25 @@ jobs:
           uv pip install --system -e .[all]
       - name: Fetch Data-Juicer Sphinx Template
         run: |
+          set -e
+          echo "Cloning sphinx template..."
           git clone --depth=1 https://github.com/datajuicer/data-juicer-sphinx.git /tmp/template
           uv pip install --system -e /tmp/template
-          mkdir -p docs
-          for f in index.rst index_ZH.rst docs_index/index.rst docs_index/index_ZH.rst; do
-            if [ -f "docs/sphinx_doc/source/$f" ]; then
-              cp "docs/sphinx_doc/source/$f" "/tmp/template/docs/sphinx_doc/source/$f"
-            fi
-          done
+          
+          if [ -d "docs/sphinx_doc/source" ]; then
+            echo "Backing up custom files..."
+            mkdir -p /tmp/custom_files
+            cp -r docs/sphinx_doc/source /tmp/custom_files
+          fi
+          
+          echo "Applying template..."
           rm -rf docs/sphinx_doc
-          mv /tmp/template/docs/sphinx_doc docs/sphinx_doc
+          mkdir -p docs
+          cp -r /tmp/template/docs/sphinx_doc docs/
+
+          echo "Restoring custom files..."
+          cp -rf /tmp/custom_files/* docs/sphinx_doc/source
+          echo "Done!"
       - name: Get git tags
         run: |
           git fetch --all --tags
