@@ -210,23 +210,29 @@ jobs:
         uses: astral-sh/setup-uv@v7
         with:
           enable-cache: true
-      - name: Install dependencies with uv
+      - name: Install dependencies with uv # 安装你的项目依赖
         run: |
           uv pip install --system --upgrade pip
           uv pip install --system -e .[all]
 
       - name: Fetch Data-Juicer Sphinx Template # 拉取模板覆盖docs/sphinx_doc，跳过自定义文件
         run: |
+          set -e
+          echo "Cloning sphinx template..."
           git clone --depth=1 https://github.com/datajuicer/data-juicer-sphinx.git /tmp/template
           uv pip install --system -e /tmp/template
-          mkdir -p docs
-          for f in index.rst index_ZH.rst docs_index/index.rst docs_index/index_ZH.rst; do
-            if [ -f "docs/sphinx_doc/source/$f" ]; then
-              cp "docs/sphinx_doc/source/$f" "/tmp/template/docs/sphinx_doc/source/$f"
-            fi
-          done
+          if [ -d "docs/sphinx_doc/source" ]; then
+            echo "Backing up custom files..."
+            mkdir -p /tmp/custom_files
+            cp -r docs/sphinx_doc/source /tmp/custom_files
+          fi
+          echo "Applying template..."
           rm -rf docs/sphinx_doc
-          mv /tmp/template/docs/sphinx_doc docs/sphinx_doc
+          mkdir -p docs
+          cp -r /tmp/template/docs/sphinx_doc docs/
+          echo "Restoring custom files..."
+          cp -rf /tmp/custom_files/source/* docs/sphinx_doc/source
+          echo "Done!"
       - name: Get git tags
         run: |
           git fetch --all --tags
@@ -242,7 +248,6 @@ jobs:
           REPOSITORY_OWNER="${GITHUB_REPOSITORY_OWNER}"
           cd docs/sphinx_doc
           cp ./redirect.html build/index.html
-          sed -i "s/\[VERSION\]/$(python -c 'import data_juicer;print(data_juicer.__version__)')/g" build/index.html
           sed -i "s/\[REPOSITORY_OWNER\]/${REPOSITORY_OWNER}/g" build/index.html
           sed -i "s/\[PROJECT\]/${PROJECT}/g" build/index.html
           cp build/index.html build/404.html
@@ -253,7 +258,7 @@ jobs:
           path: "docs/sphinx_doc/build"
 
       - name: Deploy to GitHub Pages
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        if: ${{ github.event_name == 'push' && (github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/')) }}
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}

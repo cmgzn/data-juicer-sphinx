@@ -195,8 +195,8 @@ jobs:
       PROJECT: ${{ github.event.repository.name }}
       REPO_OWNER: ${{ github.repository_owner }}
       PACKAGE_DIR: "your-project-src"
-      HTML_TITLE: "Your Project Title"  # Optional: custom title
-      MIN_VERSION: "v0.0.0"             # Optional: minimum version
+      HTML_TITLE: Your Project Title  # Optional: Custom title
+      MIN_VERSION: v0.0.0             # Optional: Minimum version
     steps:
       - uses: actions/checkout@v4
         with:
@@ -210,31 +210,28 @@ jobs:
         uses: astral-sh/setup-uv@v7
         with:
           enable-cache: true
-      - name: Install dependencies with uv
+      - name: Install dependencies with uv # Install project dependencies
         run: |
           uv pip install --system --upgrade pip
           uv pip install --system -e .[all]
 
-      - name: Fetch Data-Juicer Sphinx Template # Pull template and overwrite docs/sphinx_doc, skipping custom files
+      - name: Fetch Data-Juicer Sphinx Template # Pull template and overwrite docs/sphinx_doc, skip custom files
         run: |
           set -e
           echo "Cloning sphinx template..."
           git clone --depth=1 https://github.com/datajuicer/data-juicer-sphinx.git /tmp/template
           uv pip install --system -e /tmp/template
-          
           if [ -d "docs/sphinx_doc/source" ]; then
             echo "Backing up custom files..."
             mkdir -p /tmp/custom_files
             cp -r docs/sphinx_doc/source /tmp/custom_files
           fi
-          
           echo "Applying template..."
           rm -rf docs/sphinx_doc
           mkdir -p docs
           cp -r /tmp/template/docs/sphinx_doc docs/
-
           echo "Restoring custom files..."
-          cp -rf /tmp/custom_files/* docs/sphinx_doc/source
+          cp -rf /tmp/custom_files/source/* docs/sphinx_doc/source
           echo "Done!"
       - name: Get git tags
         run: |
@@ -251,7 +248,6 @@ jobs:
           REPOSITORY_OWNER="${GITHUB_REPOSITORY_OWNER}"
           cd docs/sphinx_doc
           cp ./redirect.html build/index.html
-          sed -i "s/\[VERSION\]/$(python -c 'import data_juicer;print(data_juicer.__version__)')/g" build/index.html
           sed -i "s/\[REPOSITORY_OWNER\]/${REPOSITORY_OWNER}/g" build/index.html
           sed -i "s/\[PROJECT\]/${PROJECT}/g" build/index.html
           cp build/index.html build/404.html
@@ -262,12 +258,12 @@ jobs:
           path: "docs/sphinx_doc/build"
 
       - name: Deploy to GitHub Pages
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        if: ${{ github.event_name == 'push' && (github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/')) }}
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./docs/sphinx_doc/build
-          cname: your-domain.com  # Optional: if using a custom domain
+          cname: your-domain.com  # Optional: Use custom domain
 ```
 
 **Enable GitHub Pages**:
