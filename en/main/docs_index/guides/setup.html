@@ -546,9 +546,8 @@ cp<span class="w"> </span>-r<span class="w"> </span>data-juicer-sphinx/docs/sphi
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>docs/sphinx_doc/source/
 ├── index.rst              # English homepage: project introduction + top navigation (DOCS/API)
 ├── index_ZH.rst           # Chinese homepage: project introduction + top navigation (DOCS/API)
-├── docs_index/
-│   ├── index.rst          # English documentation index
-│   └── index_ZH.rst       # Chinese documentation index
+├── docs_index.rst          # English documentation index
+├── docs_index_ZH.rst       # Chinese documentation index
 └── api.rst                # API documentation index (if needed)
 </pre></div>
 </div>
@@ -564,7 +563,7 @@ cp<span class="w"> </span>-r<span class="w"> </span>data-juicer-sphinx/docs/sphi
    <span class="nc">:maxdepth:</span> 2
    <span class="nc">:caption:</span> DOCS
 
-   docs_index/index
+   docs_index
 
 <span class="p">..</span> <span class="ow">toctree</span><span class="p">::</span>
    <span class="nc">:maxdepth:</span> 2
@@ -752,7 +751,6 @@ python<span class="w"> </span>-m<span class="w"> </span>http.server<span class="
 <span class="w">          </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;docs/sphinx_doc/build&quot;</span>
 
 <span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Deploy to GitHub Pages</span>
-<span class="w">        </span><span class="nt">if</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ github.event_name == &#39;push&#39; &amp;&amp; (github.ref == &#39;refs/heads/main&#39; || startsWith(github.ref, &#39;refs/tags/&#39;)) }}</span>
 <span class="w">        </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">peaceiris/actions-gh-pages@v3</span>
 <span class="w">        </span><span class="nt">with</span><span class="p">:</span>
 <span class="w">          </span><span class="nt">github_token</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ secrets.GITHUB_TOKEN }}</span>

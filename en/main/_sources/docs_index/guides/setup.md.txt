@@ -49,9 +49,8 @@ Customize the following files according to your project's needs:
 docs/sphinx_doc/source/
 ├── index.rst              # English homepage: project introduction + top navigation (DOCS/API)
 ├── index_ZH.rst           # Chinese homepage: project introduction + top navigation (DOCS/API)
-├── docs_index/
-│   ├── index.rst          # English documentation index
-│   └── index_ZH.rst       # Chinese documentation index
+├── docs_index.rst          # English documentation index
+├── docs_index_ZH.rst       # Chinese documentation index
 └── api.rst                # API documentation index (if needed)
 ```
 
@@ -68,7 +67,7 @@ docs/sphinx_doc/source/
    :maxdepth: 2
    :caption: DOCS
 
-   docs_index/index
+   docs_index
 
 .. toctree::
    :maxdepth: 2
@@ -258,7 +257,6 @@ jobs:
           path: "docs/sphinx_doc/build"
 
       - name: Deploy to GitHub Pages
-        if: ${{ github.event_name == 'push' && (github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/')) }}
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}

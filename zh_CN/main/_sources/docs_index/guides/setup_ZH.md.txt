@@ -49,9 +49,8 @@ export MIN_VERSION="v0.0.1"               # 指定从此版本开始构建（可
 docs/sphinx_doc/source/
 ├── index.rst              # 英文主页：项目介绍 + 页眉导航（DOCS/API）
 ├── index_ZH.rst           # 中文主页：项目介绍 + 页眉导航（DOCS/API）
-├── docs_index/
-│   ├── index.rst          # 英文文档索引
-│   └── index_ZH.rst       # 中文文档索引
+├── docs_index.rst          # 英文文档索引
+├── docs_index_ZH.rst       # 中文文档索引
 └── api.rst                # API 文档索引（如果需要）
 ```
 
@@ -68,7 +67,7 @@ docs/sphinx_doc/source/
    :maxdepth: 2
    :caption: DOCS
 
-   docs_index/index
+   docs_index
 
 .. toctree::
    :maxdepth: 2
@@ -258,7 +257,6 @@ jobs:
           path: "docs/sphinx_doc/build"
 
       - name: Deploy to GitHub Pages
-        if: ${{ github.event_name == 'push' && (github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/')) }}
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
