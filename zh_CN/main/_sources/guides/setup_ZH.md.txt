@@ -34,9 +34,10 @@ cp -r data-juicer-sphinx/docs/sphinx_doc your-project/docs/
 
 ```bash
 export PROJECT="your-project-name"        # 例如：data-juicer-hub
-export PACKAGE_DIR="your-project-src"     # 生成 API 文档所用的包目录
+export REPO_OWNER="your-repo-owner"       # 例如：datajuicer
+export PACKAGE_DIR="your-project-src"     # 生成 API 文档所用的包目录（可选）
 export HTML_TITLE="Your Project Title"    # 例如：Data Juicer Hub（可选）
-export MIN_VERSION="v0.0.1"               # 指定从此版本开始构建（可选）
+export MIN_TAG="v0.0.1"               # 指定从此版本开始构建（可选）
 ```
 
 或在 GitHub Actions workflow 中设置（见第 5 节）。
@@ -49,9 +50,11 @@ export MIN_VERSION="v0.0.1"               # 指定从此版本开始构建（可
 docs/sphinx_doc/source/
 ├── index.rst              # 英文主页：项目介绍 + 页眉导航（DOCS/API）
 ├── index_ZH.rst           # 中文主页：项目介绍 + 页眉导航（DOCS/API）
-├── docs_index.rst          # 英文文档索引
-├── docs_index_ZH.rst       # 中文文档索引
-└── api.rst                # API 文档索引（如果需要）
+├── docs_index.rst         # 英文文档索引
+├── docs_index_ZH.rst      # 中文文档索引
+├── api.rst                # API 文档索引
+├── external_links.yaml    # 项目外链
+└── extra_assets.yaml      # 额外资源
 ```
 
 **示例：`index.rst`**
@@ -62,6 +65,7 @@ docs/sphinx_doc/source/
    :parser: myst_parser.sphinx_
 
 .. 页眉导航
+.. 设置几个 toctree，页眉就会显示几个导航
 .. 此处建议只保留 DOCS 和 API，以免页眉导航过多
 .. toctree::
    :maxdepth: 2
@@ -75,6 +79,8 @@ docs/sphinx_doc/source/
 
    api
 ```
+
+> 注意：extra_assets.yaml 的用法见[测试文档](../docs/test_ZH.md)
 
 ### 3.3 配置项目外链
 
@@ -133,7 +139,7 @@ cd docs/sphinx_doc
 # 基础构建：只构建 main 分支，启用 API 文档
 PROJECT="your-project" python build_versions.py
 
-# 构建所有有效标签（>= v1.4.0）
+# 构建所有有效标签（>= MIN_TAG）
 PROJECT="your-project" python build_versions.py --tags
 
 # 构建指定标签
@@ -195,7 +201,7 @@ jobs:
       REPO_OWNER: ${{ github.repository_owner }}
       PACKAGE_DIR: "your-project-src"
       HTML_TITLE: Your Project Title  # 可选：自定义标题
-      MIN_VERSION: v0.0.0             # 可选：最小版本
+      MIN_TAG: v0.0.0             # 可选：最小版本
     steps:
       - uses: actions/checkout@v4
         with:

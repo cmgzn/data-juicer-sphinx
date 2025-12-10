@@ -2,13 +2,13 @@
 
 ## 1. Prerequisites
 
-Ensure your project meets the following requirements:
+Ensure your project meets the following conditions:
 
 - Uses Git for version control
-- Python 3.11 or higher
-- Has branches or tags that require documentation (e.g., `main`, `v1.5.0`, etc.)
+- Python 3.11+
+- Has branches or tags that need documentation (e.g., `main`, `v1.5.0`, etc.)
 
-## 2. Integrate into Your Project
+## 2. Integration into Your Project
 
 ### Method A: Direct Copy (for local testing)
 
@@ -16,42 +16,45 @@ Ensure your project meets the following requirements:
 # Clone the template repository
 git clone https://github.com/datajuicer/data-juicer-sphinx.git
 
-# Copy docs/sphinx_doc into your project
+# Copy docs/sphinx_doc to your project
 cp -r data-juicer-sphinx/docs/sphinx_doc your-project/docs/
 
-# Please skip your custom files during copying to avoid overwriting them
+# Skip your custom files during copying to avoid overwriting
 ```
 
-### Method B: Use GitHub Actions (for automatic deployment)
+### Method B: Using GitHub Actions (for automatic deployment)
 
 See [Section 5](#5-github-actions-automatic-deployment)
 
-## 3. Customization
+## 3. Custom Configuration
 
 ### 3.1 Set Project Information
 
-Configure via environment variables at build time:
+Set via environment variables during build:
 
 ```bash
-export PROJECT="your-project-name"        # e.g., data-juicer-hub
-export PACKAGE_DIR="your-project-src"     # Package directory for API docs
-export HTML_TITLE="Your Project Title"    # e.g., Data Juicer Hub (optional)
-export MIN_VERSION="v0.0.1"               # Build documentation starting from this version (optional)
+export PROJECT="your-project-name"        # e.g.: data-juicer-hub
+export REPO_OWNER="your-repo-owner"       # e.g.: datajuicer
+export PACKAGE_DIR="your-project-src"     # Package directory for API doc generation (optional)
+export HTML_TITLE="Your Project Title"    # e.g.: Data Juicer Hub (optional)
+export MIN_TAG="v0.0.1"                   # Specify minimum version to build from (optional)
 ```
 
-Or set these in your GitHub Actions workflow (see Section 5).
+Or set in GitHub Actions workflow (see Section 5).
 
 ### 3.2 Customize Key Files
 
-Customize the following files according to your project's needs:
+Customize the following files according to your project needs:
 
 ```
 docs/sphinx_doc/source/
-├── index.rst              # English homepage: project introduction + top navigation (DOCS/API)
-├── index_ZH.rst           # Chinese homepage: project introduction + top navigation (DOCS/API)
-├── docs_index.rst          # English documentation index
-├── docs_index_ZH.rst       # Chinese documentation index
-└── api.rst                # API documentation index (if needed)
+├── index.rst              # English homepage: project intro + header navigation (DOCS/API)
+├── index_ZH.rst           # Chinese homepage: project intro + header navigation (DOCS/API)
+├── docs_index.rst         # English docs index
+├── docs_index_ZH.rst      # Chinese docs index
+├── api.rst                # API documentation index
+├── external_links.yaml    # External project links
+└── extra_assets.yaml      # Additional resources
 ```
 
 **Example: `index.rst`**
@@ -61,8 +64,9 @@ docs/sphinx_doc/source/
 .. include:: README.md
    :parser: myst_parser.sphinx_
 
-.. Top Navigation
-.. It's recommended to keep only DOCS and API here to avoid cluttering the header navigation
+.. Header Navigation
+.. Set multiple toctrees to display multiple navigation items in header
+.. It's recommended to keep only DOCS and API to avoid cluttering the header
 .. toctree::
    :maxdepth: 2
    :caption: DOCS
@@ -76,7 +80,9 @@ docs/sphinx_doc/source/
    api
 ```
 
-### 3.3 Configure External Links
+> Note: For usage of extra_assets.yaml, see [Test Document](../docs/test.md)
+
+### 3.3 Configure External Project Links
 
 Edit `docs/sphinx_doc/source/external_links.yaml`:
 
@@ -92,11 +98,11 @@ projects:
     repo_name: data-juicer-hub
     display_name: DJ Hub
   
-  your-new-project:          # Add your project here
+  your-new-project:          # Add your project
     repo_name: your-repo-name
     display_name: Your Display Name
 
-link_order:                  # Controls the display order of external links
+link_order:                  # Control external link display order
   - data-juicer
   - data-juicer-hub
   - your-new-project
@@ -111,7 +117,7 @@ docs/sphinx_doc/source/_static/images/
 └── icon.png     # Your project icon
 ```
 
-## 4. Local Build and Testing
+## 4. Local Build and Test
 
 ### 4.1 Install Dependencies
 
@@ -120,7 +126,7 @@ cd your-project
 pip install .
 ```
 
-Or using `uv` (recommended):
+Or use `uv` (recommended):
 ```bash
 uv pip install .
 ```
@@ -130,10 +136,10 @@ uv pip install .
 ```bash
 cd docs/sphinx_doc
 
-# Basic build: only builds main branch, with API docs enabled
+# Basic build: build main branch only, enable API documentation
 PROJECT="your-project" python build_versions.py
 
-# Build all valid tags (>= v1.4.0)
+# Build all valid tags (>= MIN_TAG)
 PROJECT="your-project" python build_versions.py --tags
 
 # Build specific tags
@@ -148,7 +154,7 @@ PROJECT="your-project" python build_versions.py --no-api-doc
 # Build English documentation only
 PROJECT="your-project" python build_versions.py --languages en
 
-# Full example: build main and dev branches + all tags, with API docs enabled
+# Complete example: build main and dev branches + all tags, enable API docs
 PROJECT="your-project" python build_versions.py \
     --branches main dev \
     --tags \
@@ -158,11 +164,11 @@ PROJECT="your-project" python build_versions.py \
 ### 4.3 View Build Results
 
 ```bash
-# Start a local server
+# Start local server
 python -m http.server 8000 --directory build
 
 # Visit http://localhost:8000/en/main/index.html
-# or     http://localhost:8000/zh_CN/main/index_ZH.html
+# Or     http://localhost:8000/zh_CN/main/index_ZH.html
 ```
 
 ## 5. GitHub Actions Automatic Deployment
@@ -194,8 +200,8 @@ jobs:
       PROJECT: ${{ github.event.repository.name }}
       REPO_OWNER: ${{ github.repository_owner }}
       PACKAGE_DIR: "your-project-src"
-      HTML_TITLE: Your Project Title  # Optional: Custom title
-      MIN_VERSION: v0.0.0             # Optional: Minimum version
+      HTML_TITLE: Your Project Title  # Optional: custom title
+      MIN_TAG: v0.0.0             # Optional: minimum version
     steps:
       - uses: actions/checkout@v4
         with:
@@ -209,12 +215,12 @@ jobs:
         uses: astral-sh/setup-uv@v7
         with:
           enable-cache: true
-      - name: Install dependencies with uv # Install project dependencies
+      - name: Install dependencies with uv # Install your project dependencies
         run: |
           uv pip install --system --upgrade pip
           uv pip install --system -e .[all]
 
-      - name: Fetch Data-Juicer Sphinx Template # Pull template and overwrite docs/sphinx_doc, skip custom files
+      - name: Fetch Data-Juicer Sphinx Template # Pull template to override docs/sphinx_doc, skip custom files
         run: |
           set -e
           echo "Cloning sphinx template..."
@@ -261,10 +267,10 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./docs/sphinx_doc/build
-          cname: your-domain.com  # Optional: Use custom domain
+          cname: your-domain.com  # Optional: if using custom domain
 ```
 
 **Enable GitHub Pages**:
-1. Go to your repository Settings → Pages
-2. Set Source to the `gh-pages` branch
-3. After saving, visit `https://your-domain.github.io/your-project/`
+1. Go to repository Settings → Pages
+2. Select `gh-pages` branch as Source
+3. Save and visit `https://your-domain.github.io/your-project/`
