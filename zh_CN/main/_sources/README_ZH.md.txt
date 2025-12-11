@@ -15,18 +15,16 @@
 ```
 data-juicer-sphinx/
 ├── docs/
-│   └── sphinx_doc/                              # Sphinx 文档构建目录
-│       ├── build_versions.py                    # 多版本构建脚本（主入口）
-│       ├── make.bat / Makefile                  # 构建脚本
-│       ├── redirect.html                        # 重定向页面
-│       └── source/                              # 文档源文件
-│           ├── conf.py                          # Sphinx 配置文件
-│           ├── custom_myst.py                   # 自定义 MyST 扩展
-│           ├── external_links.yaml              # 外部项目链接配置
-│           ├── index.rst / index_ZH.rst         # 主页（建议自定义）
-│           ├── docs_index/                      # 文档索引目录
-│           │   ├── index.rst / index_ZH.rst     # 文档索引页（建议自定义）
-│           │   └── ...                          # 自动复制的 Markdown 文件
+│   └── sphinx_doc/                                 # Sphinx 文档构建目录
+│       ├── build_versions.py                       # 多版本构建脚本（主入口）
+│       ├── make.bat / Makefile                     # 构建脚本
+│       ├── redirect.html                           # 重定向页面
+│       └── source/                                 # 文档源文件
+│           ├── conf.py                             # Sphinx 配置文件
+│           ├── custom_myst.py                      # 自定义 MyST 扩展
+│           ├── external_links.yaml                 # 外部项目链接配置
+│           ├── index.rst / index_ZH.rst            # 主页（建议自定义）
+│           ├── docs_index.rst / docs_index_ZH.rst  # 文档索引页（建议自定义）
 │           ├── api.rst                          # API 文档索引（建议自定义）
 │           ├── _static/                         # 静态资源
 │           │   ├── custom.css                   # 自定义样式
@@ -65,7 +63,7 @@ python build_versions.py -A -l en
 
 ### **文档内容聚合**
 - 自动扫描整个工作树，收集所有 `.md` 和 `.rst` 文件（排除 `outputs`, `sphinx_doc`, `.github` 等目录）。
-- 将这些文件复制到统一的 Sphinx 源目录 `docs/sphinx_doc/source/docs_index/` 下。
+- 将这些文件复制到统一的 Sphinx 源目录 `docs/sphinx_doc/source/` 下。
 - （data-juicer 算子文档定制）对于 `operators/` 目录下的次级文件夹，自动生成对应的 `index.rst` 和 `index_ZH.rst`，便于算子分类索引。
 
 ## 常见问题

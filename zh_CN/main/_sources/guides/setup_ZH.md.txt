@@ -87,7 +87,7 @@ docs/sphinx_doc/source/
 编辑 `docs/sphinx_doc/source/external_links.yaml`：
 
 ```yaml
-url_template: "https://datajuicer.github.io/{project}/{language}/{version}/index.html"
+url_template: "https://{repo_owner}.github.io/{project}/{language}/{version}/index.html"
 
 projects:
   data-juicer:
@@ -107,6 +107,10 @@ link_order:                  # 控制外链显示顺序
   - data-juicer-hub
   - your-new-project
 ```
+
+> `url_template` 表示外链的模板，其中`{repo_owner}`、`{project}`、`{language}` 会被替换为实际值。
+> `{version}` 会被替换为 `main`。
+
 
 ### 3.4 自定义 Logo 和图标
 
@@ -265,6 +269,7 @@ jobs:
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
+          if: ${{ github.event_name == 'push' && (github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/')) }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./docs/sphinx_doc/build
           cname: your-domain.com  # 可选：如果使用自定义域名

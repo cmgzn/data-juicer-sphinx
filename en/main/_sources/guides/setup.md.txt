@@ -87,7 +87,7 @@ docs/sphinx_doc/source/
 Edit `docs/sphinx_doc/source/external_links.yaml`:
 
 ```yaml
-url_template: "https://datajuicer.github.io/{project}/{language}/{version}/index.html"
+url_template: "https://{repo_name}.github.io/{project}/{language}/{version}/index.html"
 
 projects:
   data-juicer:
@@ -107,6 +107,10 @@ link_order:                  # Control external link display order
   - data-juicer-hub
   - your-new-project
 ```
+
+> `url_template` represents the template for external links, where `{repo_owner}`, `{project}`, and `{language}` will be replaced with actual values.  
+> `{version}` will be replaced with `main`.
+
 
 ### 3.4 Customize Logo and Icons
 
@@ -265,6 +269,7 @@ jobs:
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
+          if: ${{ github.event_name == 'push' && (github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/')) }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./docs/sphinx_doc/build
           cname: your-domain.com  # Optional: if using custom domain

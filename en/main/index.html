@@ -481,10 +481,8 @@
 │           ├── conf.py                          # Sphinx configuration file
 │           ├── custom_myst.py                   # Custom MyST extension
 │           ├── external_links.yaml              # External project link configuration
-│           ├── index.rst / index_ZH.rst         # Home page (customization recommended)
-│           ├── docs_index/                      # Documentation index directory
-│           │   ├── index.rst / index_ZH.rst     # Documentation index page (customization recommended)
-│           │   └── ...                          # Automatically copied Markdown files
+│           ├── index.rst / index_ZH.rst               # Home page (customization recommended)
+│           ├── docs_index.rst / docs_index_ZH.rst     # Documentation index page (customization recommended)
 │           ├── api.rst                          # API documentation index (customization recommended)
 │           ├── _static/                         # Static assets
 │           │   ├── custom.css                   # Custom styles
@@ -528,7 +526,7 @@ python<span class="w"> </span>build_versions.py<span class="w"> </span>-A<span c
 <h3><strong>Documentation Content Aggregation</strong><a class="headerlink" href="#documentation-content-aggregation" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Automatically scans the entire worktree to collect all <code class="docutils literal notranslate"><span class="pre">.md</span></code> and <code class="docutils literal notranslate"><span class="pre">.rst</span></code> files (excluding directories like <code class="docutils literal notranslate"><span class="pre">outputs</span></code>, <code class="docutils literal notranslate"><span class="pre">sphinx_doc</span></code>, <code class="docutils literal notranslate"><span class="pre">.github</span></code>, etc.).</p></li>
-<li><p>Copies these files into a unified Sphinx source directory: <code class="docutils literal notranslate"><span class="pre">docs/sphinx_doc/source/docs_index/</span></code>.</p></li>
+<li><p>Copies these files into a unified Sphinx source directory: <code class="docutils literal notranslate"><span class="pre">docs/sphinx_doc/source/</span></code>.</p></li>
 <li><p>(Customized for Data-Juicer operator documentation) For subdirectories under <code class="docutils literal notranslate"><span class="pre">operators/</span></code>, automatically generates corresponding <code class="docutils literal notranslate"><span class="pre">index.rst</span></code> and <code class="docutils literal notranslate"><span class="pre">index_ZH.rst</span></code> files to facilitate categorized operator indexing.</p></li>
 </ul>
 </section>

@@ -23,10 +23,8 @@ data-juicer-sphinx/
 │           ├── conf.py                          # Sphinx configuration file
 │           ├── custom_myst.py                   # Custom MyST extension
 │           ├── external_links.yaml              # External project link configuration
-│           ├── index.rst / index_ZH.rst         # Home page (customization recommended)
-│           ├── docs_index/                      # Documentation index directory
-│           │   ├── index.rst / index_ZH.rst     # Documentation index page (customization recommended)
-│           │   └── ...                          # Automatically copied Markdown files
+│           ├── index.rst / index_ZH.rst               # Home page (customization recommended)
+│           ├── docs_index.rst / docs_index_ZH.rst     # Documentation index page (customization recommended)
 │           ├── api.rst                          # API documentation index (customization recommended)
 │           ├── _static/                         # Static assets
 │           │   ├── custom.css                   # Custom styles
@@ -65,7 +63,7 @@ python build_versions.py -A -l en
 
 ### **Documentation Content Aggregation**
 - Automatically scans the entire worktree to collect all `.md` and `.rst` files (excluding directories like `outputs`, `sphinx_doc`, `.github`, etc.).
-- Copies these files into a unified Sphinx source directory: `docs/sphinx_doc/source/docs_index/`.
+- Copies these files into a unified Sphinx source directory: `docs/sphinx_doc/source/`.
 - (Customized for Data-Juicer operator documentation) For subdirectories under `operators/`, automatically generates corresponding `index.rst` and `index_ZH.rst` files to facilitate categorized operator indexing.
 
 ## Frequently Asked Questions
