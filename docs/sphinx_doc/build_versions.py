@@ -93,7 +93,7 @@ def maybe_init_submodules(wt_root: Path):
 
 def create_index_rst(target_dir: Path):
     index_rst = target_dir / "index.rst"
-    index_ZH_rst = target_dir / "index_ZH.rst"
+    # index_ZH_rst = target_dir / "index_ZH.rst"
     if not index_rst.exists():
         print(f"[CREATE] index_rst: {index_rst}")
         folder_name = target_dir.name.capitalize()
@@ -110,22 +110,23 @@ def create_index_rst(target_dir: Path):
 """
         index_rst.write_text(content, encoding="utf-8")
 
-    if not index_ZH_rst.exists():
-        print(f"[CREATE] index_ZH_rst: {index_ZH_rst}")
-        folder_name = ts.translate_text(
-            target_dir.name, translator="alibaba", from_language="en", to_language="zh"
-        )
-        content = f"""\
-{folder_name}
-{'=' * len(folder_name) * 2}
-.. toctree::
-    :maxdepth: 1
-    :glob:
+#     if not index_ZH_rst.exists():
+#         print(f"[CREATE] index_ZH_rst: {index_ZH_rst}")
+#         # folder_name = ts.translate_text(
+#         #     target_dir.name, translator="alibaba", from_language="en", to_language="zh"
+#         # )
+#         folder_name = target_dir.name.capitalize()
+#         content = f"""\
+# {folder_name}
+# {'=' * len(folder_name) * 2}
+# .. toctree::
+#     :maxdepth: 1
+#     :glob:
 
-    ./*
-    ./**/*
-"""
-        index_ZH_rst.write_text(content, encoding="utf-8")
+#     ./*
+#     ./**/*
+# """
+#         index_ZH_rst.write_text(content, encoding="utf-8")
 
 
 def copy_markdown_files(wt_root: Path):
