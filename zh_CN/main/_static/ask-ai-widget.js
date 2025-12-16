@@ -8,7 +8,6 @@ class AskAIWidget {
     this.isTyping = false;
     this.apiConnected = false;
     this.sessionId = this.generateSessionId();
-    this.userId = null;
     this.init();
   }
 
@@ -29,95 +28,11 @@ class AskAIWidget {
   async init() {
     this.createWidget();
     this.bindEvents();
-    this.userId = this.getUserIdFromCookie(); // 从 Cookie 获取或生成 user_id
     await this.checkApiConnection();
     await this.loadConversationHistory();
     this.addWelcomeMessage();
   }
 
-  /**
-   * 从 Cookie 获取或生成用户ID
-   */
-  getUserIdFromCookie() {
-    const cookieName = 'ask_ai_user_id';
-    
-    // 尝试从 Cookie 读取现有的 user_id
-    let userId = this.getCookie(cookieName);
-    
-    if (userId) {
-      console.log('Using existing user ID from cookie:', userId);
-      return userId;
-    }
-    
-    // 如果 Cookie 中没有，生成新的 user_id
-    userId = this.generateUserId();
-    
-    // 保存到 Cookie（有效期365天）
-    this.setCookie(cookieName, userId, 365);
-    
-    console.log('Generated new user ID and saved to cookie:', userId);
-    return userId;
-  }
-
-  /**
-   * 生成唯一的用户ID
-   */
-  generateUserId() {
-    const timestamp = Date.now();
-    const random = Math.random().toString(36).substr(2, 9);
-    return `user_${timestamp}_${random}`;
-  }
-
-  /**
-   * 设置 Cookie
-   * @param {string} name - Cookie 名称
-   * @param {string} value - Cookie 值
-   * @param {number} days - 过期天数
-   */
-  setCookie(name, value, days) {
-    let expires = '';
-    if (days) {
-      const date = new Date();
-      date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
-      expires = '; expires=' + date.toUTCString();
-    }
-    
-    // 设置 Cookie，包含安全属性
-    document.cookie = name + '=' + (value || '') + expires + '; path=/; SameSite=Lax';
-    
-    console.log(`Cookie set: ${name}=${value}`);
-  }
-
-  /**
-   * 获取 Cookie
-   * @param {string} name - Cookie 名称
-   * @returns {string|null} - Cookie 值或 null
-   */
-  getCookie(name) {
-    const nameEQ = name + '=';
-    const cookies = document.cookie.split(';');
-    
-    for (let i = 0; i < cookies.length; i++) {
-      let cookie = cookies[i];
-      while (cookie.charAt(0) === ' ') {
-        cookie = cookie.substring(1, cookie.length);
-      }
-      if (cookie.indexOf(nameEQ) === 0) {
-        return cookie.substring(nameEQ.length, cookie.length);
-      }
-    }
-    
-    return null;
-  }
-
-  /**
-   * 删除 Cookie
-   * @param {string} name - Cookie 名称
-   */
-  deleteCookie(name) {
-    this.setCookie(name, '', -1);
-    console.log(`Cookie deleted: ${name}`);
-  }
 
 
   createWidget() {
@@ -277,6 +192,7 @@ class AskAIWidget {
           },
         ],
         session_id: this.sessionId,
+        user_id: "",
       };
       console.log('Loading conversation history for session:', this.sessionId);
 
@@ -450,6 +366,7 @@ class AskAIWidget {
           },
         ],
         session_id: this.sessionId,
+        user_id: "",
       };
 
       const response = await fetch(`${this.getApiBaseUrl()}/clear`, {
@@ -532,6 +449,7 @@ class AskAIWidget {
           },
         ],
         session_id: this.sessionId,
+        user_id: "",
       };
 
       console.log('Sending streaming request to:', `${this.getApiBaseUrl()}/process`);
