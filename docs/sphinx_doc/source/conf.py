@@ -116,7 +116,7 @@ html_sidebars = {
 html_css_files = [
     "custom.css",
 ]
-html_js_files = ['sidebar.js']
+html_js_files = ['sidebar.js', 'switcher-mobile.js']
 
 html_static_path = ["_static"]
 html_extra_path = ["extra"]

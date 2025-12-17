@@ -1,17 +1,22 @@
 <div class="navbar-switcher-container">
   {% if supported_languages %}
-  <div class="navbar-dropdown">
-    <div class="navbar-dropdown-trigger">
-      <span class="dropdown-label">
-        🌐 {{ language }}
-      </span>
-      <i class="fa-solid fa-chevron-down dropdown-icon"></i>
-    </div>
-    <div class="navbar-dropdown-panel">
+  <div class="navbar-dropdown language-dropdown">
+    <button type="button" 
+            class="navbar-dropdown-trigger" 
+            aria-haspopup="true"
+            aria-expanded="false"
+            aria-label="Select language: {{ language }}">
+      <span class="switcher-icon" aria-hidden="true">🌐</span>
+      <span class="switcher-text">{{ language }}</span>
+      <i class="fa-solid fa-chevron-down dropdown-icon" aria-hidden="true"></i>
+    </button>
+    <div class="navbar-dropdown-panel" role="menu">
       <div class="dropdown-content">
         {% for lang_code, lang_name in supported_languages.items() %}
         <a href="{{ pathto('', 1) ~ '../../' ~ get_lang_link(language, pagename, lang_code, non_zh_pages, current_version) }}"
-           class="dropdown-item {% if language == lang_code %}active{% endif %}">
+           class="dropdown-item {% if language == lang_code %}active{% endif %}"
+           role="menuitem"
+           {% if language == lang_code %}aria-current="true"{% endif %}>
           {{ lang_name }}
         </a>
         {% endfor %}
@@ -21,18 +26,23 @@
   {% endif %}
 
   {% if available_versions %}
-  <div class="navbar-dropdown">
-    <div class="navbar-dropdown-trigger">
-      <span class="dropdown-label">
-        📦 {{ current_version or 'main' }}
-      </span>
-      <i class="fa-solid fa-chevron-down dropdown-icon"></i>
-    </div>
-    <div class="navbar-dropdown-panel">
-      <div class="dropdown-content version-list">
+  <div class="navbar-dropdown version-dropdown">
+    <button type="button" 
+            class="navbar-dropdown-trigger" 
+            aria-haspopup="true"
+            aria-expanded="false"
+            aria-label="Select version: {{ current_version or 'main' }}">
+      <span class="switcher-icon" aria-hidden="true">📦</span>
+      <span class="switcher-text">{{ current_version or 'main' }}</span>
+      <i class="fa-solid fa-chevron-down dropdown-icon" aria-hidden="true"></i>
+    </button>
+    <div class="navbar-dropdown-panel" role="menu">
+      <div class="dropdown-content">
         {% for v in available_versions %}
         <a href="{{ pathto('', 1) ~ '../' ~ v ~ '/' ~ pagename ~ '.html' }}"
-           class="dropdown-item {% if v == current_version %}active{% endif %}">
+           class="dropdown-item {% if v == current_version %}active{% endif %}"
+           role="menuitem"
+           {% if v == current_version %}aria-current="true"{% endif %}>
           {{ v }}
         </a>
         {% endfor %}

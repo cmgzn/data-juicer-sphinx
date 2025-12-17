@@ -6,7 +6,6 @@ import subprocess
 import argparse
 import yaml
 from pathlib import Path
-import translators as ts
 from packaging import version as pv
 
 # Repository structure and build configuration
@@ -51,6 +50,7 @@ def get_tags():
     tags = [t for t in out.splitlines() if t]
     return [t for t in tags if is_valid_tag(t)]
 
+
 def load_extra_assets_config():
     config_path = os.path.join(os.path.dirname(__file__), "source/extra_assets.yaml")
     if not os.path.exists(config_path):
@@ -58,6 +58,7 @@ def load_extra_assets_config():
 
     with open(config_path, "r", encoding="utf-8") as f:
         return yaml.safe_load(f)
+
 
 def ensure_clean_worktree(path: Path):
     """Remove existing worktree if present to ensure clean state"""
@@ -110,24 +111,6 @@ def create_index_rst(target_dir: Path):
 """
         index_rst.write_text(content, encoding="utf-8")
 
-#     if not index_ZH_rst.exists():
-#         print(f"[CREATE] index_ZH_rst: {index_ZH_rst}")
-#         # folder_name = ts.translate_text(
-#         #     target_dir.name, translator="alibaba", from_language="en", to_language="zh"
-#         # )
-#         folder_name = target_dir.name.capitalize()
-#         content = f"""\
-# {folder_name}
-# {'=' * len(folder_name) * 2}
-# .. toctree::
-#     :maxdepth: 1
-#     :glob:
-
-#     ./*
-#     ./**/*
-# """
-#         index_ZH_rst.write_text(content, encoding="utf-8")
-
 
 def copy_markdown_files(wt_root: Path):
     print(f"[TRACE] wt_root: {wt_root}")
@@ -141,12 +124,7 @@ def copy_markdown_files(wt_root: Path):
         ]:
             target = wt_root / DOCS_REL / "source" / md_file.name
         else:
-            target = (
-                wt_root
-                / DOCS_REL
-                / "source"
-                / md_file.relative_to(wt_root)
-            )
+            target = wt_root / DOCS_REL / "source" / md_file.relative_to(wt_root)
         target_dir = target.parent
         target_dir.mkdir(parents=True, exist_ok=True)
 
@@ -162,16 +140,14 @@ def copy_markdown_files(wt_root: Path):
     for rst_file in docs_path.rglob("*.rst"):
         if any(path in str(rst_file) for path in exclude_paths):
             continue
-        target = (
-            wt_root / DOCS_REL / "source" / rst_file.relative_to(wt_root)
-        )
+        target = wt_root / DOCS_REL / "source" / rst_file.relative_to(wt_root)
         target.parent.mkdir(parents=True, exist_ok=True)
         if not target.exists():
             print(f"[COPY] {rst_file} -> {target}")
             shutil.copy2(rst_file, target)
 
     assets_list = load_extra_assets_config()["assets"]
-    
+
     for asset_rel_path in assets_list:
         if (wt_root / asset_rel_path).exists():
             shutil.copytree(
@@ -179,6 +155,7 @@ def copy_markdown_files(wt_root: Path):
                 wt_root / DOCS_REL / "source" / "extra" / asset_rel_path,
                 dirs_exist_ok=True,
             )
+
 
 def build_one(
     ref: str,
