@@ -28,6 +28,7 @@ class AskAIWidget {
   async init() {
     this.createWidget();
     this.bindEvents();
+    this.observeThemeChanges();
     await this.checkApiConnection();
     await this.loadConversationHistory();
     this.addWelcomeMessage();
@@ -51,8 +52,9 @@ class AskAIWidget {
         <div class="ask-ai-header">
           <h3 class="ask-ai-title">DataJuicer Q&A Copilot</h3>
           <div class="ask-ai-header-buttons">
-            <button class="ask-ai-clear" id="askAiClear" title="Clear conversation history">🧹</button>
-            <button class="ask-ai-close" id="askAiClose" title="Close">×</button>
+            <button class="ask-ai-clear" id="askAiClear" title="Restart conversation"><i class="fa-solid fa-arrows-rotate"></i></button>
+            <button class="ask-ai-expand" id="askAiExpand" title="Expand/Collapse"><i class="fa-solid fa-expand"></i></button>
+            <button class="ask-ai-close" id="askAiClose" title="Minimize"><i class="fa-solid fa-minus"></i></button>
           </div>
         </div>
 
@@ -85,16 +87,28 @@ class AskAIWidget {
     this.modal = document.getElementById('askAiModal');
     this.closeBtn = document.getElementById('askAiClose');
     this.clearBtn = document.getElementById('askAiClear');
+    this.expandBtn = document.getElementById('askAiExpand');
     this.messagesContainer = document.getElementById('askAiMessages');
     this.input = document.getElementById('askAiInput');
     this.sendBtn = document.getElementById('askAiSend');
+    this.isExpanded = false;
   }
 
   bindEvents() {
     // Toggle modal
     this.button.addEventListener('click', () => this.toggleModal());
-    this.closeBtn.addEventListener('click', () => this.closeModal());
-    this.clearBtn.addEventListener('click', () => this.clearConversation());
+    this.closeBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      this.closeModal();
+    });
+    this.clearBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      this.clearConversation();
+    });
+    this.expandBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      this.toggleExpand();
+    });
 
     // Send message
     this.sendBtn.addEventListener('click', () => this.sendMessage());
@@ -112,7 +126,12 @@ class AskAIWidget {
 
     // Close modal when clicking outside
     document.addEventListener('click', (e) => {
-      if (this.isOpen && !this.modal.contains(e.target) && !this.button.contains(e.target)) {
+      if (this.isOpen && 
+          !this.modal.contains(e.target) && 
+          !this.button.contains(e.target) &&
+          !this.expandBtn.contains(e.target) &&
+          !this.closeBtn.contains(e.target) &&
+          !this.clearBtn.contains(e.target)) {
         this.closeModal();
       }
     });
@@ -143,6 +162,30 @@ class AskAIWidget {
   closeModal() {
     this.isOpen = false;
     this.modal.classList.remove('show');
+  }
+
+  toggleExpand() {
+    this.isExpanded = !this.isExpanded;
+    
+    if (this.isExpanded) {
+      this.modal.classList.add('expanded');
+      // 尝试查找图标元素（可能是 <i> 或 <svg>）
+      const icon = this.expandBtn.querySelector('i, svg');
+      if (icon) {
+        icon.classList.remove('fa-expand');
+        icon.classList.add('fa-compress');
+      }
+      this.expandBtn.title = 'Collapse';
+    } else {
+      this.modal.classList.remove('expanded');
+      // 尝试查找图标元素（可能是 <i> 或 <svg>）
+      const icon = this.expandBtn.querySelector('i, svg');
+      if (icon) {
+        icon.classList.remove('fa-compress');
+        icon.classList.add('fa-expand');
+      }
+      this.expandBtn.title = 'Expand';
+    }
   }
 
   autoResizeInput() {
@@ -719,6 +762,48 @@ class AskAIWidget {
   addCustomResponse(keywords, response) {
     // This could be extended to add custom keyword-response mappings
     console.log('Custom response added:', keywords, response);
+  }
+
+  // Observe theme changes from the Sphinx theme
+  observeThemeChanges() {
+    // Apply initial theme
+    this.updateWidgetTheme();
+
+    // Watch for theme changes on html or body element
+    const targetNode = document.documentElement || document.body;
+    
+    const observer = new MutationObserver((mutations) => {
+      mutations.forEach((mutation) => {
+        if (mutation.type === 'attributes' && 
+            (mutation.attributeName === 'class' || 
+             mutation.attributeName === 'data-theme' ||
+             mutation.attributeName === 'data-bs-theme')) {
+          this.updateWidgetTheme();
+        }
+      });
+    });
+
+    observer.observe(targetNode, {
+      attributes: true,
+      attributeFilter: ['class', 'data-theme', 'data-bs-theme']
+    });
+  }
+
+  updateWidgetTheme() {
+    const html = document.documentElement;
+    const body = document.body;
+    
+    // Check various theme indicators
+    const isDark = 
+      html.getAttribute('data-theme') === 'dark';
+    
+    if (isDark) {
+      this.modal.classList.add('theme-dark');
+      this.button.classList.add('theme-dark');
+    } else {
+      this.modal.classList.remove('theme-dark');
+      this.button.classList.remove('theme-dark');
+    }
   }
 }
 
