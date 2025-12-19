@@ -705,7 +705,17 @@ class AskAIWidget {
     if (!text) return '';
 
     try {
-      return marked.parse(text);
+      const renderer = new marked.Renderer();
+
+      // custom title
+      renderer.heading = (token) => {
+        const size = ['1.3em', '1.2em', '1.1em', '1em', '0.95em', '0.9em'];
+        const escapedText = this.escapeHtml(token.text);
+        return `<h${token.depth} style="font-size: ${size[token.depth - 1]}; margin: 0.3em 0;">
+        ${escapedText}
+      </h${token.depth}>`;
+      };
+      return marked.parse(text, { renderer });
     } catch (error) {
       console.error('Markdown rendering error:', error);
       return this.escapeHtml(text).replace(/\n/g, '<br>');
