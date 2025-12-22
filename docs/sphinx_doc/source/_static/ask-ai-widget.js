@@ -555,36 +555,40 @@ class AskAIWidget {
 
             // Handle tool use: plugin_call
             if (data.object === "message" && data.type === "plugin_call") {
-              const toolCall = data.content.find(item => item.type === "data")?.data;
-              if (toolCall) {
-                const toolName = toolCall.name || 'Unknown Tool';
-                assistantMessageDiv.innerHTML = `
-                  <div class="tool-indicator" style="color: #888; font-style: italic; font-size: 0.9em; opacity: 0.8;">
-                    <span class="tool-icon">🔧</span>
-                    <span class="tool-text">Using ${toolName}</span>
-                    <span class="tool-dots">
-                      <span style="animation: blink 1.4s infinite both; animation-delay: 0.0s;">.</span>
-                      <span style="animation: blink 1.4s infinite both; animation-delay: 0.2s;">.</span>
-                      <span style="animation: blink 1.4s infinite both; animation-delay: 0.4s;">.</span>
-                    </span>
-                  </div>
-                  <style>
-                    @keyframes blink {
-                      0%, 80%, 100% { opacity: 0; }
-                      40% { opacity: 1; }
-                    }
-                  </style>
-                `;
-                this.scrollToBottom();
+              if (Array.isArray(data.content)) {
+                const toolCall = data.content.find(item => item.type === "data")?.data;
+                if (toolCall) {
+                  const toolName = toolCall.name || 'Unknown Tool';
+                  assistantMessageDiv.innerHTML = `
+                    <div class="tool-indicator" style="color: #888; font-style: italic; font-size: 0.9em; opacity: 0.8;">
+                      <span class="tool-icon">🔧</span>
+                      <span class="tool-text">Using ${toolName}</span>
+                      <span class="tool-dots">
+                        <span style="animation: blink 1.4s infinite both; animation-delay: 0.0s;">.</span>
+                        <span style="animation: blink 1.4s infinite both; animation-delay: 0.2s;">.</span>
+                        <span style="animation: blink 1.4s infinite both; animation-delay: 0.4s;">.</span>
+                      </span>
+                    </div>
+                    <style>
+                      @keyframes blink {
+                        0%, 80%, 100% { opacity: 0; }
+                        40% { opacity: 1; }
+                      }
+                    </style>
+                  `;
+                  this.scrollToBottom();
+                }
               }
             }
 
             // Handle tool output: plugin_call_output
             if (data.object === "message" && data.type === "plugin_call_output") {
-              const output = data.content.find(item => item.type === "data")?.data?.output;
-              if (output) {
-                console.log('Tool output received:', output.substring(0, 200) + '...');
+              if (Array.isArray(data.content)) {
+                const output = data.content.find(item => item.type === "data")?.data?.output;
+                if (output) {
+                  console.log('Tool output received:', output.substring(0, 200) + '...');
                 // Optionally render output in collapsed section
+                }
               }
             }
 
