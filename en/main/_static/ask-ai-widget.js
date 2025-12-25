@@ -1,6 +1,53 @@
 /**
  * Ask AI Widget
  */
+
+// Language configurations
+const I18N = {
+  en: {
+    title: 'Data-Juicer Q&A Copilot',
+    buttonTitle: 'Ask Juicer',
+    clearTitle: 'Restart conversation',
+    expandTitle: 'Expand/Collapse',
+    collapseTitle: 'Collapse',
+    minimizeTitle: 'Minimize',
+    sendTitle: 'Send message',
+    inputPlaceholder: 'Type your question here...',
+    welcomeMessage: '👋 Hi! I\'m Juicer. Ask me anything about Data-Juicer!',
+    welcomeConnected: '👋 Hi! I\'m Juicer. <span style="color: #28a745;">🟢 Connected</span><br>Ask me anything about Data-Juicer!',
+    welcomeOffline: '👋 Hi! I\'m Juicer. <span style="color: #dc3545;">🔴 Offline Mode</span><br>Please ensure the API service is running.',
+    clearConfirm: 'Are you sure you want to clear the conversation history? This action cannot be undone.',
+    clearFailed: 'Failed to clear conversation history. Please try again.',
+    clearError: 'Error clearing conversation history. Please check your connection and try again.',
+    sendError: 'Sorry, I encountered an error. Please try again later.',
+    noResponse: 'I processed your request but no valid response was generated. Please try again.',
+    connectionError: 'Unable to connect to AI service, please check network or contact administrator.',
+    offlineResponse: 'Sorry, the Q&A Bot API is not configured or currently unavailable. Please refer to the Data-Juicer documentation for information, or contact the administrator to configure the API service.',
+    usingTool: 'Using'
+  },
+  zh_CN: {
+    title: 'Data-Juicer Q&A Copilot',
+    buttonTitle: '询问 Juicer',
+    clearTitle: '重新开始对话',
+    expandTitle: '展开/收起',
+    collapseTitle: '收起',
+    minimizeTitle: '最小化',
+    sendTitle: '发送消息',
+    inputPlaceholder: '在此输入您的问题...',
+    welcomeMessage: '👋 你好！我是 Juicer。问我任何关于 Data-Juicer 的问题！',
+    welcomeConnected: '👋 你好！我是 Juicer。<span style="color: #28a745;">🟢 已连接</span><br>问我任何关于 Data-Juicer 的问题！',
+    welcomeOffline: '👋 你好！我是 Juicer。<span style="color: #dc3545;">🔴 离线模式</span><br>请确保 API 服务正在运行。',
+    clearConfirm: '确定要清除对话历史吗？此操作无法撤销。',
+    clearFailed: '清除对话历史失败。请重试。',
+    clearError: '清除对话历史时出错。请检查您的连接并重试。',
+    sendError: '抱歉，遇到了一个错误。请稍后再试。',
+    noResponse: '我处理了您的请求，但没有生成有效的响应。请重试。',
+    connectionError: '无法连接到 AI 服务，请检查网络或联系管理员。',
+    offlineResponse: '抱歉，Juicer API 未配置或当前不可用。请参阅 Data-Juicer 文档获取信息，或联系管理员配置 API 服务。',
+    usingTool: '正在调用'
+  }
+};
+
 class AskAIWidget {
   constructor() {
     if (typeof marked === 'undefined') {
@@ -13,6 +60,8 @@ class AskAIWidget {
     this.isTyping = false;
     this.apiConnected = false;
     this.sessionId = this.generateSessionId();
+    this.language = this.detectLanguage();
+    this.i18n = I18N[this.language.replace('-', '_')] || I18N.en;
     marked.setOptions({
       breaks: true,
       gfm: true,
@@ -20,6 +69,41 @@ class AskAIWidget {
       mangle: false,
     });
     this.init();
+  }
+
+  detectLanguage() {
+    // Try to get language from HTML lang attribute
+    const htmlLang = document.documentElement.lang;
+    if (htmlLang) {
+      // Handle both 'zh-CN' and 'zh_CN' formats
+      const normalizedLang = htmlLang.replace('-', '_');
+      if (I18N[normalizedLang]) {
+        return normalizedLang;
+      }
+      // Try just the language code (e.g., 'zh' from 'zh-CN')
+      const langCode = normalizedLang.split('_')[0];
+      if (langCode === 'zh') {
+        return 'zh_CN';
+      }
+    }
+    
+    // Try to get language from meta tag
+    const metaLang = document.querySelector('meta[name="language"]');
+    if (metaLang && metaLang.content) {
+      const normalizedLang = metaLang.content.replace('-', '_');
+      if (I18N[normalizedLang]) {
+        return normalizedLang;
+      }
+    }
+    
+    // Try to detect from URL (e.g., /zh_CN/version/page.html)
+    const urlMatch = window.location.pathname.match(/\/(zh_CN|en)\//);
+    if (urlMatch && I18N[urlMatch[1]]) {
+      return urlMatch[1];
+    }
+    
+    // Default to English
+    return 'en';
   }
 
   generateSessionId() {
@@ -53,7 +137,7 @@ class AskAIWidget {
     widget.className = 'ask-ai-widget';
     widget.innerHTML = `
       <!-- Ask AI Button -->
-      <button class="ask-ai-button" id="askAiButton" title="Ask Juicer">
+      <button class="ask-ai-button" id="askAiButton" title="${this.i18n.buttonTitle}">
         🤖
       </button>
 
@@ -61,18 +145,18 @@ class AskAIWidget {
       <div class="ask-ai-modal" id="askAiModal">
         <!-- Header -->
         <div class="ask-ai-header">
-          <h3 class="ask-ai-title">DataJuicer Q&A Copilot</h3>
+          <h3 class="ask-ai-title">${this.i18n.title}</h3>
           <div class="ask-ai-header-buttons">
-            <button class="ask-ai-clear" id="askAiClear" title="Restart conversation"><i class="fa-solid fa-arrows-rotate"></i></button>
-            <button class="ask-ai-expand" id="askAiExpand" title="Expand/Collapse"><i class="fa-solid fa-expand"></i></button>
-            <button class="ask-ai-close" id="askAiClose" title="Minimize"><i class="fa-solid fa-minus"></i></button>
+            <button class="ask-ai-clear" id="askAiClear" title="${this.i18n.clearTitle}"><i class="fa-solid fa-arrows-rotate"></i></button>
+            <button class="ask-ai-expand" id="askAiExpand" title="${this.i18n.expandTitle}"><i class="fa-solid fa-expand"></i></button>
+            <button class="ask-ai-close" id="askAiClose" title="${this.i18n.minimizeTitle}"><i class="fa-solid fa-minus"></i></button>
           </div>
         </div>
 
         <!-- Messages Area -->
         <div class="ask-ai-messages" id="askAiMessages">
           <div class="ask-ai-welcome">
-            👋 Hi! I'm Juicer. Ask me anything about Data-Juicer!
+            ${this.i18n.welcomeMessage}
           </div>
         </div>
 
@@ -81,10 +165,10 @@ class AskAIWidget {
           <textarea 
             class="ask-ai-input" 
             id="askAiInput" 
-            placeholder="Type your question here..."
+            placeholder="${this.i18n.inputPlaceholder}"
             rows="1"
           ></textarea>
-          <button class="ask-ai-send" id="askAiSend" title="Send message">
+          <button class="ask-ai-send" id="askAiSend" title="${this.i18n.sendTitle}">
             ➤
           </button>
         </div>
@@ -186,7 +270,7 @@ class AskAIWidget {
         icon.classList.remove('fa-expand');
         icon.classList.add('fa-compress');
       }
-      this.expandBtn.title = 'Collapse';
+      this.expandBtn.title = this.i18n.collapseTitle;
     } else {
       this.modal.classList.remove('expanded');
       // 尝试查找图标元素（可能是 <i> 或 <svg>）
@@ -195,7 +279,7 @@ class AskAIWidget {
         icon.classList.remove('fa-compress');
         icon.classList.add('fa-expand');
       }
-      this.expandBtn.title = 'Expand';
+      this.expandBtn.title = this.i18n.expandTitle;
     }
   }
 
@@ -305,9 +389,9 @@ class AskAIWidget {
       const welcomeElement = this.messagesContainer.querySelector('.ask-ai-welcome');
       if (welcomeElement) {
         if (this.apiConnected) {
-          welcomeElement.innerHTML = '👋 Hi! I\'m Juicer, your AI assistant for Data-Juicer! <span style="color: #28a745;">🟢 Connected</span><br>Ask me anything about Data-Juicer!';
+          welcomeElement.innerHTML = this.i18n.welcomeConnected;
         } else {
-          welcomeElement.innerHTML = '👋 Hi! I\'m Juicer, your AI assistant for Data-Juicer! <span style="color: #dc3545;">🔴 Offline Mode</span><br>Please ensure the API service is running.';
+          welcomeElement.innerHTML = this.i18n.welcomeOffline;
         }
       }
     } else {
