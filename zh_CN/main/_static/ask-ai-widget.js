@@ -19,9 +19,9 @@ var AskAIWidget = (function () {
       minimizeTitle: 'Minimize',
       sendTitle: 'Send message',
       inputPlaceholder: 'Type your question here...',
-      welcomeMessage: '👋 Hi! I\'m Juicer. Ask me anything about Data-Juicer!',
-      welcomeConnected: '👋 Hi! I\'m Juicer. <span style="color: #28a745;">🟢 Connected</span><br>Ask me anything about Data-Juicer!',
-      welcomeOffline: '👋 Hi! I\'m Juicer. <span style="color: #dc3545;">🔴 Offline Mode</span><br>Please ensure the API service is running.',
+      welcomeMessage: '👋 Hi! I\'m Juicer. Ask me anything about Data-Juicer!<br><br><small style="color: #888;">Powered by <a href="https://github.com/datajuicer/data-juicer-agents" target="_blank" style="color: #667eea; text-decoration: none;">data-juicer-agents</a></small>',
+      welcomeConnected: '👋 Hi! I\'m Juicer. <span style="color: #28a745;">🟢 Connected</span><br>Ask me anything about Data-Juicer!<br><br><small style="color: #888;">Powered by <a href="https://github.com/datajuicer/data-juicer-agents" target="_blank" style="color: #667eea; text-decoration: none;">data-juicer-agents</a></small>',
+      welcomeOffline: '👋 Hi! I\'m Juicer. <span style="color: #dc3545;">🔴 Offline Mode</span><br>Please ensure the API service is running.<br><br><small style="color: #888;">Powered by <a href="https://github.com/datajuicer/data-juicer-agents" target="_blank" style="color: #667eea; text-decoration: none;">data-juicer-agents</a></small>',
       clearConfirm: 'Are you sure you want to clear the conversation history? This action cannot be undone.',
       clearFailed: 'Failed to clear conversation history. Please try again.',
       clearError: 'Error clearing conversation history. Please check your connection and try again.',
@@ -49,9 +49,9 @@ var AskAIWidget = (function () {
       minimizeTitle: '最小化',
       sendTitle: '发送消息',
       inputPlaceholder: '在此输入您的问题...',
-      welcomeMessage: '👋 你好！我是 Juicer。问我任何关于 Data-Juicer 的问题！',
-      welcomeConnected: '👋 你好！我是 Juicer。<span style="color: #28a745;">🟢 已连接</span><br>问我任何关于 Data-Juicer 的问题！',
-      welcomeOffline: '👋 你好！我是 Juicer。<span style="color: #dc3545;">🔴 离线模式</span><br>请确保 API 服务正在运行。',
+      welcomeMessage: '👋 你好！我是 Juicer。问我任何关于 Data-Juicer 的问题！<br><br><small style="color: #888;">技术支持：<a href="https://github.com/datajuicer/data-juicer-agents" target="_blank" style="color: #667eea; text-decoration: none;">data-juicer-agents</a></small>',
+      welcomeConnected: '👋 你好！我是 Juicer。<span style="color: #28a745;">🟢 已连接</span><br>问我任何关于 Data-Juicer 的问题！<br><br><small style="color: #888;">技术支持：<a href="https://github.com/datajuicer/data-juicer-agents" target="_blank" style="color: #667eea; text-decoration: none;">data-juicer-agents</a></small>',
+      welcomeOffline: '👋 你好！我是 Juicer。<span style="color: #dc3545;">🔴 离线模式</span><br>请确保 API 服务正在运行。<br><br><small style="color: #888;">技术支持：<a href="https://github.com/datajuicer/data-juicer-agents" target="_blank" style="color: #667eea; text-decoration: none;">data-juicer-agents</a></small>',
       clearConfirm: '确定要清除对话历史吗？此操作无法撤销。',
       clearFailed: '清除对话历史失败。请重试。',
       clearError: '清除对话历史时出错。请检查您的连接并重试。',
@@ -583,7 +583,7 @@ var AskAIWidget = (function () {
       widget.innerHTML = `
       <!-- Ask AI Button -->
       <button class="ask-ai-button" id="askAiButton" title="${this.i18n.buttonTitle}">
-        🤖
+        <span class="ask-ai-button-text">Ask AI</span>
       </button>
 
       <!-- Chat Modal -->

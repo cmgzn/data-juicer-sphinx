@@ -30,7 +30,7 @@ export class AskAIUI {
     widget.innerHTML = `
       <!-- Ask AI Button -->
       <button class="ask-ai-button" id="askAiButton" title="${this.i18n.buttonTitle}">
-        🤖
+        <span class="ask-ai-button-text">Ask AI</span>
       </button>
 
       <!-- Chat Modal -->

@@ -13,9 +13,10 @@
 
 /* Ask AI Button */
 .ask-ai-button {
-  width: 60px;
-  height: 60px;
-  border-radius: 50%;
+  min-width: 100px;
+  height: 48px;
+  padding: 0 20px;
+  border-radius: 24px;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   border: none;
   cursor: pointer;
@@ -25,7 +26,13 @@
   align-items: center;
   justify-content: center;
   color: white;
-  font-size: 24px;
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+.ask-ai-button-text {
+  white-space: nowrap;
 }
 
 .ask-ai-button:hover {
