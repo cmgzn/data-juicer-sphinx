@@ -134,12 +134,6 @@ var AskAIWidget = (function () {
         return window.JUICER_API_URL;
       }
 
-      const currentHost = window.location.hostname;
-
-      if (currentHost === 'localhost' || currentHost === '127.0.0.1') {
-        return 'http://localhost:8080';
-      }
-
       return 'http://localhost:8080';
     }
 
@@ -354,9 +348,12 @@ var AskAIWidget = (function () {
               // Handle tool use
               if (data.object === "message" && data.type === "plugin_call") {
                 if (Array.isArray(data.content)) {
-                  const toolCallWithId = data.content[0]?.type === "data" ? data.content[0].data : null;
-                  const toolCallWithArgs = data.content.length > 1 ? data.content[1] : data.content[0];
-                  const toolCall = toolCallWithArgs?.type === "data" ? toolCallWithArgs.data : null;
+                  // Use Array.find() for more robust parsing instead of relying on array order
+                  const toolCallIdData = data.content.find(item => item?.type === "data" && item.data?.call_id);
+                  const toolCallArgsData = data.content.find(item => item?.type === "data" && item.data?.name);
+                  
+                  const toolCallWithId = toolCallIdData?.data || null;
+                  const toolCall = toolCallArgsData?.data || null;
                   
                   if (toolCall && onToolUse) {
                     const toolName = toolCall.name || 'Unknown Tool';
@@ -1196,8 +1193,10 @@ var AskAIWidget = (function () {
     updateWidgetTheme() {
       const html = document.documentElement;
 
-      // Check various theme indicators
-      const isDark = html.getAttribute('data-theme') === 'dark';
+      // Check various theme indicators to match the observer's scope
+      const isDark = html.getAttribute('data-theme') === 'dark' ||
+                     html.getAttribute('data-bs-theme') === 'dark' ||
+                     document.body.classList.contains('theme-dark');
 
       if (isDark) {
         this.modal.classList.add('theme-dark');
@@ -1427,8 +1426,16 @@ var AskAIWidget = (function () {
             const isUser = msg.role === 'user';
             const content = msg.content.trim();
 
-            // Skip JSON array messages (tool calls)
-            if (!(content.startsWith('[{') && content.endsWith('}]'))) {
+            // Skip JSON array messages (tool calls) - use try-catch for more robust detection
+            let isJsonArray = false;
+            try {
+              const parsed = JSON.parse(content);
+              isJsonArray = Array.isArray(parsed);
+            } catch (e) {
+              // Not valid JSON, treat as regular content
+            }
+            
+            if (!isJsonArray) {
               if (content) {
                 const messageId = msg.id || `history_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
                 // For assistant messages from history, add helpSuffix
@@ -1539,12 +1546,6 @@ var AskAIWidget = (function () {
               console.log('Adding feedback buttons in onComplete');
               this.ui.addFeedbackButtons(assistantMessageDiv, assistantMessage.id, finalContent);
             } else if (hasFeedbackButtons) {
-              // Update feedback buttons' message ID
-              const feedbackButtons = messageWrapper.querySelectorAll('.ask-ai-feedback-btn[data-message-id]');
-              feedbackButtons.forEach(btn => {
-                btn.setAttribute('data-message-id', assistantMessage.id);
-              });
-              
               // Update stored content for copying
               const feedbackDiv = messageWrapper.querySelector('.ask-ai-feedback-actions');
               if (feedbackDiv) {
@@ -1609,10 +1610,7 @@ var AskAIWidget = (function () {
         this.ui.clearMessages();
 
         // Add welcome message back
-        const welcomeDiv = document.createElement('div');
-        welcomeDiv.className = 'ask-ai-welcome';
-        welcomeDiv.innerHTML = this.i18n.welcomeMessage;
-        this.ui.messagesContainer.appendChild(welcomeDiv);
+        this.addWelcomeMessage();
 
         console.log('Conversation cleared successfully');
       } else {

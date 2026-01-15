@@ -293,7 +293,7 @@
   line-height: 1.5;
 }
 
-/* Feedback buttons */
+/* Feedback buttons container */
 .ask-ai-feedback {
   display: flex;
   gap: 8px;
@@ -301,49 +301,12 @@
   justify-content: flex-start;
 }
 
-.ask-ai-feedback-btn {
-  background: none;
-  border: none;
-  font-size: 16px;
-  cursor: pointer;
-  padding: 4px 8px;
-  border-radius: 12px;
-  transition: all 0.2s ease;
-  opacity: 0.6;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 32px;
-  height: 28px;
-}
-
-.ask-ai-feedback-btn:hover {
-  opacity: 1;
-  background-color: rgba(0, 0, 0, 0.05);
-}
-
-.ask-ai-feedback-btn.active {
-  opacity: 1;
-  background-color: rgba(102, 126, 234, 0.1);
-  color: #667eea;
-}
-
-.ask-ai-feedback-btn.like.active {
-  background-color: rgba(40, 167, 69, 0.1);
-  color: #28a745;
-}
-
-.ask-ai-feedback-btn.dislike.active {
-  background-color: rgba(220, 53, 69, 0.1);
-  color: #dc3545;
-}
-
 /* Mobile Responsive Styles */
 @media (max-width: 768px) {
 
   /* Hide expand button on mobile */
   .ask-ai-expand {
-    display: none !important;
+    display: none;
   }
 
   /* Adjust widget position */
@@ -709,21 +672,22 @@
   opacity: 1;
 }
 
-/* Feedback button styles */
+/* Feedback button styles - consolidated definition */
 .ask-ai-feedback-btn {
   background: none;
   border: none;
+  font-size: 14px;
+  cursor: pointer;
   padding: 4px 6px;
   border-radius: 4px;
-  cursor: pointer;
-  color: var(--text-color-secondary, #666);
-  font-size: 14px;
   transition: all 0.2s ease;
+  opacity: 0.6;
   display: flex;
   align-items: center;
   justify-content: center;
   min-width: 28px;
   height: 28px;
+  color: var(--text-color-secondary, #666);
 }
 
 .ask-ai-feedback-btn:hover {

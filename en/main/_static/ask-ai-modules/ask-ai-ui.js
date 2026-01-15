@@ -641,8 +641,10 @@ export class AskAIUI {
   updateWidgetTheme() {
     const html = document.documentElement;
 
-    // Check various theme indicators
-    const isDark = html.getAttribute('data-theme') === 'dark';
+    // Check various theme indicators to match the observer's scope
+    const isDark = html.getAttribute('data-theme') === 'dark' ||
+                   html.getAttribute('data-bs-theme') === 'dark' ||
+                   document.body.classList.contains('theme-dark');
 
     if (isDark) {
       this.modal.classList.add('theme-dark');

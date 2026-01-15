@@ -203,8 +203,16 @@ class AskAIWidget {
           const isUser = msg.role === 'user';
           const content = msg.content.trim();
 
-          // Skip JSON array messages (tool calls)
-          if (!(content.startsWith('[{') && content.endsWith('}]'))) {
+          // Skip JSON array messages (tool calls) - use try-catch for more robust detection
+          let isJsonArray = false;
+          try {
+            const parsed = JSON.parse(content);
+            isJsonArray = Array.isArray(parsed);
+          } catch (e) {
+            // Not valid JSON, treat as regular content
+          }
+          
+          if (!isJsonArray) {
             if (content) {
               const messageId = msg.id || `history_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
               // For assistant messages from history, add helpSuffix
@@ -315,12 +323,6 @@ class AskAIWidget {
             console.log('Adding feedback buttons in onComplete');
             this.ui.addFeedbackButtons(assistantMessageDiv, assistantMessage.id, finalContent);
           } else if (hasFeedbackButtons) {
-            // Update feedback buttons' message ID
-            const feedbackButtons = messageWrapper.querySelectorAll('.ask-ai-feedback-btn[data-message-id]');
-            feedbackButtons.forEach(btn => {
-              btn.setAttribute('data-message-id', assistantMessage.id);
-            });
-            
             // Update stored content for copying
             const feedbackDiv = messageWrapper.querySelector('.ask-ai-feedback-actions');
             if (feedbackDiv) {
@@ -385,10 +387,7 @@ class AskAIWidget {
       this.ui.clearMessages();
 
       // Add welcome message back
-      const welcomeDiv = document.createElement('div');
-      welcomeDiv.className = 'ask-ai-welcome';
-      welcomeDiv.innerHTML = this.i18n.welcomeMessage;
-      this.ui.messagesContainer.appendChild(welcomeDiv);
+      this.addWelcomeMessage();
 
       console.log('Conversation cleared successfully');
     } else {
