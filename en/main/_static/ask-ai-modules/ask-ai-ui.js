@@ -323,27 +323,18 @@ export class AskAIUI {
 
 
   /**
-   * Update an existing assistant message
-   * @param {string} messageId - Message ID to update
-   * @param {string} content - New content
-   */
-  updateMessage(messageId, content) {
-    const messageDiv = this.messagesContainer.querySelector(`[data-message-id="${messageId}"]`);
-    if (messageDiv) {
-      messageDiv.innerHTML = this.renderMarkdown(content);
-      this.scrollToBottom();
-    }
-  }
-
-  /**
    * Update message content while preserving tool calls and feedback buttons
    * @param {HTMLElement} messageDiv - Message element
    * @param {string} content - New content
+   * @param {boolean} addSuffix - Whether to add helpSuffix (default: false, used during streaming)
    */
-  updateMessageContent(messageDiv, content) {
+  updateMessageContent(messageDiv, content, addSuffix = false) {
     if (!messageDiv) return;
 
     const messageId = messageDiv.getAttribute('data-message-id');
+    
+    // Only append helpSuffix when explicitly requested (at the end of response)
+    const contentToRender = addSuffix ? content + (this.i18n.helpSuffix || '') : content;
     
     // Check if there's a tool calls container or feedback buttons
     const toolContainer = messageDiv.querySelector('.tool-calls-inline');
@@ -365,10 +356,10 @@ export class AskAIUI {
         }
       }
       // Update only the content part
-      contentWrapper.innerHTML = this.renderMarkdown(content);
+      contentWrapper.innerHTML = this.renderMarkdown(contentToRender);
     } else {
       // No tool calls or feedback, replace innerHTML and add feedback buttons
-      messageDiv.innerHTML = this.renderMarkdown(content);
+      messageDiv.innerHTML = this.renderMarkdown(contentToRender);
       if (messageId) {
         this.addFeedbackButtons(messageDiv, messageId, content);
       }
@@ -380,6 +371,16 @@ export class AskAIUI {
     }
     
     this.scrollToBottom();
+  }
+
+  /**
+   * Finalize message content by adding helpSuffix
+   * Called when response is complete
+   * @param {HTMLElement} messageDiv - Message element
+   * @param {string} content - Final content
+   */
+  finalizeMessage(messageDiv, content) {
+    this.updateMessageContent(messageDiv, content, true);
   }
 
   /**

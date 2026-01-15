@@ -207,7 +207,9 @@ class AskAIWidget {
           if (!(content.startsWith('[{') && content.endsWith('}]'))) {
             if (content) {
               const messageId = msg.id || `history_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-              this.ui.addMessage(content, isUser ? 'user' : 'assistant', messageId);
+              // For assistant messages from history, add helpSuffix
+              const contentWithSuffix = isUser ? content : content + (this.i18n.helpSuffix || '');
+              this.ui.addMessage(contentWithSuffix, isUser ? 'user' : 'assistant', messageId);
             }
           }
         }
@@ -297,8 +299,8 @@ class AskAIWidget {
               .join('');
           }
           
-          // Update with verified content
-          this.ui.updateMessageContent(assistantMessageDiv, finalContent);
+          // Update with verified content and add helpSuffix at the end
+          this.ui.finalizeMessage(assistantMessageDiv, finalContent);
           
           // Update with server-provided message ID
           if (assistantMessage.id) {
