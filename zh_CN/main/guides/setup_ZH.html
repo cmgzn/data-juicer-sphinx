@@ -41,11 +41,11 @@
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
     <script src="../_static/documentation_options.js?v=91bfbbb6"></script>
-    <script src="../_static/doctools.js?v=9bcbadda"></script>
-    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="../_static/copybutton.js?v=f281be69"></script>
-    <script src="../_static/translations.js?v=beaddf03"></script>
+    <script src="../_static/translations.js?v=540d3cec"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'guides/setup_ZH';</script>
     <script src="../_static/sidebar.js?v=3fc1065c"></script>
     <script src="../_static/switcher-mobile.js?v=07875724"></script>
@@ -534,9 +534,9 @@
                 <article class="bd-article">
                   
   <section id="id1">
-<h1>为你的项目启用本模板<a class="headerlink" href="#id1" title="Link to this heading">#</a></h1>
+<h1>为你的项目启用本模板<a class="headerlink" href="#id1" title="链接到此标题。">#</a></h1>
 <section id="id2">
-<h2>1. 准备工作<a class="headerlink" href="#id2" title="Link to this heading">#</a></h2>
+<h2>1. 准备工作<a class="headerlink" href="#id2" title="链接到此标题。">#</a></h2>
 <p>确保你的项目满足以下条件：</p>
 <ul class="simple">
 <li><p>使用 Git 进行版本控制</p></li>
@@ -545,9 +545,9 @@
 </ul>
 </section>
 <section id="id3">
-<h2>2. 集成到你的项目<a class="headerlink" href="#id3" title="Link to this heading">#</a></h2>
+<h2>2. 集成到你的项目<a class="headerlink" href="#id3" title="链接到此标题。">#</a></h2>
 <section id="a">
-<h3>方法 A：直接复制（用于本地测试）<a class="headerlink" href="#a" title="Link to this heading">#</a></h3>
+<h3>方法 A：直接复制（用于本地测试）<a class="headerlink" href="#a" title="链接到此标题。">#</a></h3>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># 克隆模板仓库</span>
 git<span class="w"> </span>clone<span class="w"> </span>https://github.com/datajuicer/data-juicer-sphinx.git
 
@@ -559,14 +559,14 @@ cp<span class="w"> </span>-r<span class="w"> </span>data-juicer-sphinx/docs/sphi
 </div>
 </section>
 <section id="b-github-actions">
-<h3>方法 B：使用 GitHub Actions （用于自动部署）<a class="headerlink" href="#b-github-actions" title="Link to this heading">#</a></h3>
+<h3>方法 B：使用 GitHub Actions （用于自动部署）<a class="headerlink" href="#b-github-actions" title="链接到此标题。">#</a></h3>
 <p>见<a class="reference internal" href="#github-actions">第 5 节</a></p>
 </section>
 </section>
 <section id="id4">
-<h2>3. 自定义配置<a class="headerlink" href="#id4" title="Link to this heading">#</a></h2>
+<h2>3. 自定义配置<a class="headerlink" href="#id4" title="链接到此标题。">#</a></h2>
 <section id="id5">
-<h3>3.1 设置项目信息<a class="headerlink" href="#id5" title="Link to this heading">#</a></h3>
+<h3>3.1 设置项目信息<a class="headerlink" href="#id5" title="链接到此标题。">#</a></h3>
 <p>在构建时通过环境变量设置：</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">PROJECT</span><span class="o">=</span><span class="s2">&quot;your-project-name&quot;</span><span class="w">        </span><span class="c1"># 例如：data-juicer-hub</span>
 <span class="nb">export</span><span class="w"> </span><span class="nv">REPO_OWNER</span><span class="o">=</span><span class="s2">&quot;your-repo-owner&quot;</span><span class="w">       </span><span class="c1"># 例如：datajuicer</span>
@@ -578,7 +578,7 @@ cp<span class="w"> </span>-r<span class="w"> </span>data-juicer-sphinx/docs/sphi
 <p>或在 GitHub Actions workflow 中设置（见第 5 节）。</p>
 </section>
 <section id="id6">
-<h3>3.2 自定义关键文件<a class="headerlink" href="#id6" title="Link to this heading">#</a></h3>
+<h3>3.2 自定义关键文件<a class="headerlink" href="#id6" title="链接到此标题。">#</a></h3>
 <p>根据你的项目需求自定义以下文件：</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>docs/sphinx_doc/source/
 ├── index.rst              # 英文主页：项目介绍 + 页眉导航（DOCS/API）
@@ -617,7 +617,7 @@ cp<span class="w"> </span>-r<span class="w"> </span>data-juicer-sphinx/docs/sphi
 </div></blockquote>
 </section>
 <section id="id7">
-<h3>3.3 配置项目外链<a class="headerlink" href="#id7" title="Link to this heading">#</a></h3>
+<h3>3.3 配置项目外链<a class="headerlink" href="#id7" title="链接到此标题。">#</a></h3>
 <p>编辑 <code class="docutils literal notranslate"><span class="pre">docs/sphinx_doc/source/external_links.yaml</span></code>：</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">url_template</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;https://{repo_owner}.github.io/{project}/{language}/{version}/index.html&quot;</span>
 
@@ -646,7 +646,7 @@ cp<span class="w"> </span>-r<span class="w"> </span>data-juicer-sphinx/docs/sphi
 </div></blockquote>
 </section>
 <section id="logo">
-<h3>3.4 自定义 Logo 和图标<a class="headerlink" href="#logo" title="Link to this heading">#</a></h3>
+<h3>3.4 自定义 Logo 和图标<a class="headerlink" href="#logo" title="链接到此标题。">#</a></h3>
 <p>替换以下文件：</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>docs/sphinx_doc/source/_static/images/
 └── icon.png     # 你的项目图标
@@ -655,9 +655,9 @@ cp<span class="w"> </span>-r<span class="w"> </span>data-juicer-sphinx/docs/sphi
 </section>
 </section>
 <section id="id8">
-<h2>4. 本地构建测试<a class="headerlink" href="#id8" title="Link to this heading">#</a></h2>
+<h2>4. 本地构建测试<a class="headerlink" href="#id8" title="链接到此标题。">#</a></h2>
 <section id="id9">
-<h3>4.1 安装依赖<a class="headerlink" href="#id9" title="Link to this heading">#</a></h3>
+<h3>4.1 安装依赖<a class="headerlink" href="#id9" title="链接到此标题。">#</a></h3>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>your-project
 pip<span class="w"> </span>install<span class="w"> </span>.
 </pre></div>
@@ -668,7 +668,7 @@ pip<span class="w"> </span>install<span class="w"> </span>.
 </div>
 </section>
 <section id="id10">
-<h3>4.2 构建文档<a class="headerlink" href="#id10" title="Link to this heading">#</a></h3>
+<h3>4.2 构建文档<a class="headerlink" href="#id10" title="链接到此标题。">#</a></h3>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>docs/sphinx_doc
 
 <span class="c1"># 基础构建：只构建 main 分支，启用 API 文档</span>
@@ -698,7 +698,7 @@ pip<span class="w"> </span>install<span class="w"> </span>.
 </div>
 </section>
 <section id="id11">
-<h3>4.3 查看构建结果<a class="headerlink" href="#id11" title="Link to this heading">#</a></h3>
+<h3>4.3 查看构建结果<a class="headerlink" href="#id11" title="链接到此标题。">#</a></h3>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># 启动本地服务器</span>
 python<span class="w"> </span>-m<span class="w"> </span>http.server<span class="w"> </span><span class="m">8000</span><span class="w"> </span>--directory<span class="w"> </span>build
 
@@ -709,7 +709,7 @@ python<span class="w"> </span>-m<span class="w"> </span>http.server<span class="
 </section>
 </section>
 <section id="github-actions">
-<h2>5. GitHub Actions 自动部署<a class="headerlink" href="#github-actions" title="Link to this heading">#</a></h2>
+<h2>5. GitHub Actions 自动部署<a class="headerlink" href="#github-actions" title="链接到此标题。">#</a></h2>
 <p>在你的项目中创建 <code class="docutils literal notranslate"><span class="pre">.github/workflows/docs.yml</span></code>：</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Deploy Sphinx documentation to Pages</span>
 
@@ -934,7 +934,7 @@ python<span class="w"> </span>-m<span class="w"> </span>http.server<span class="
         <div class="footer-item">
 
   <p class="sphinx-version">
-    由 <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3创建。
+    由 <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.0.4创建。
     <br/>
   </p>
 </div>

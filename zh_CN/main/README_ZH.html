@@ -41,11 +41,11 @@
 <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
     <script src="_static/documentation_options.js?v=91bfbbb6"></script>
-    <script src="_static/doctools.js?v=9bcbadda"></script>
-    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="_static/copybutton.js?v=f281be69"></script>
-    <script src="_static/translations.js?v=beaddf03"></script>
+    <script src="_static/translations.js?v=540d3cec"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'README_ZH';</script>
     <script src="_static/sidebar.js?v=3fc1065c"></script>
     <script src="_static/switcher-mobile.js?v=07875724"></script>
@@ -515,10 +515,10 @@
                 <article class="bd-article">
                   
   <section id="data-juicer-sphinx">
-<h1>Data-Juicer Sphinx 文档模板<a class="headerlink" href="#data-juicer-sphinx" title="Link to this heading">#</a></h1>
+<h1>Data-Juicer Sphinx 文档模板<a class="headerlink" href="#data-juicer-sphinx" title="链接到此标题。">#</a></h1>
 <p>这是一个为 Data-Juicer 生态系统设计的统一文档构建模板，基于 Sphinx 和 pydata-sphinx-theme，提供多版本、多语言文档构建能力，让所有子项目保持一致的文档外观和用户体验。</p>
 <section id="id1">
-<h2>特性<a class="headerlink" href="#id1" title="Link to this heading">#</a></h2>
+<h2>特性<a class="headerlink" href="#id1" title="链接到此标题。">#</a></h2>
 <ul class="simple">
 <li><p><strong>统一外观</strong>：所有子项目共享相同的文档主题和样式</p></li>
 <li><p><strong>多版本支持</strong>：自动构建多个 Git 分支和标签的文档</p></li>
@@ -528,7 +528,7 @@
 </ul>
 </section>
 <section id="id2">
-<h2>项目结构<a class="headerlink" href="#id2" title="Link to this heading">#</a></h2>
+<h2>项目结构<a class="headerlink" href="#id2" title="链接到此标题。">#</a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>data-juicer-sphinx/
 ├── docs/
 │   └── sphinx_doc/                                 # Sphinx 文档构建目录
@@ -555,7 +555,7 @@
 </div>
 </section>
 <section id="id3">
-<h2>快速开始<a class="headerlink" href="#id3" title="Link to this heading">#</a></h2>
+<h2>快速开始<a class="headerlink" href="#id3" title="链接到此标题。">#</a></h2>
 <p>快速构建一个最简单的 Data-Juicer Sphinx 英文文档（不含 api 文档）：</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/datajuicer/data-juicer-sphinx.git
 
@@ -568,20 +568,20 @@ python<span class="w"> </span>build_versions.py<span class="w"> </span>-A<span c
 </div>
 </section>
 <section id="id4">
-<h2>文档<a class="headerlink" href="#id4" title="Link to this heading">#</a></h2>
+<h2>文档<a class="headerlink" href="#id4" title="链接到此标题。">#</a></h2>
 <p><a class="reference external" href="https://datajuicer.github.io/data-juicer-sphinx/zh_CN/main/index_ZH.html">此处</a></p>
 </section>
 <section id="id5">
-<h2>核心原理<a class="headerlink" href="#id5" title="Link to this heading">#</a></h2>
+<h2>核心原理<a class="headerlink" href="#id5" title="链接到此标题。">#</a></h2>
 <section id="git-worktree">
-<h3><strong>隔离构建环境（Git Worktree）</strong><a class="headerlink" href="#git-worktree" title="Link to this heading">#</a></h3>
+<h3><strong>隔离构建环境（Git Worktree）</strong><a class="headerlink" href="#git-worktree" title="链接到此标题。">#</a></h3>
 <ul class="simple">
 <li><p>为每个版本（分支/标签）创建独立的 Git 工作树（位于 <code class="docutils literal notranslate"><span class="pre">.worktrees/&lt;version&gt;</span></code>）。</p></li>
 <li><p>构建完成后自动清理（除非在<code class="docutils literal notranslate"><span class="pre">docs/sphinx_doc/build_versions.py</span></code>中设置 <code class="docutils literal notranslate"><span class="pre">KEEP_WORKTREES=True</span></code>），避免污染主工作区。</p></li>
 </ul>
 </section>
 <section id="id6">
-<h3><strong>文档内容聚合</strong><a class="headerlink" href="#id6" title="Link to this heading">#</a></h3>
+<h3><strong>文档内容聚合</strong><a class="headerlink" href="#id6" title="链接到此标题。">#</a></h3>
 <ul class="simple">
 <li><p>自动扫描整个工作树，收集所有 <code class="docutils literal notranslate"><span class="pre">.md</span></code> 和 <code class="docutils literal notranslate"><span class="pre">.rst</span></code> 文件（排除 <code class="docutils literal notranslate"><span class="pre">outputs</span></code>, <code class="docutils literal notranslate"><span class="pre">sphinx_doc</span></code>, <code class="docutils literal notranslate"><span class="pre">.github</span></code> 等目录）。</p></li>
 <li><p>将这些文件复制到统一的 Sphinx 源目录 <code class="docutils literal notranslate"><span class="pre">docs/sphinx_doc/source/</span></code> 下。</p></li>
@@ -590,16 +590,16 @@ python<span class="w"> </span>build_versions.py<span class="w"> </span>-A<span c
 </section>
 </section>
 <section id="id7">
-<h2>常见问题<a class="headerlink" href="#id7" title="Link to this heading">#</a></h2>
+<h2>常见问题<a class="headerlink" href="#id7" title="链接到此标题。">#</a></h2>
 <section id="q1">
-<h3>Q1: 构建失败，提示找不到模块<a class="headerlink" href="#q1" title="Link to this heading">#</a></h3>
+<h3>Q1: 构建失败，提示找不到模块<a class="headerlink" href="#q1" title="链接到此标题。">#</a></h3>
 <p><strong>A</strong>: 确保在构建前安装了所有依赖：</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>uv<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>.
 </pre></div>
 </div>
 </section>
 <section id="q2-api">
-<h3>Q2: API 文档没有生成<a class="headerlink" href="#q2-api" title="Link to this heading">#</a></h3>
+<h3>Q2: API 文档没有生成<a class="headerlink" href="#q2-api" title="链接到此标题。">#</a></h3>
 <p><strong>A</strong>: 检查以下几点：</p>
 <ul class="simple">
 <li><p>确保没有使用 <code class="docutils literal notranslate"><span class="pre">--no-api-doc</span></code> 或 <code class="docutils literal notranslate"><span class="pre">-A</span></code> 参数</p></li>
@@ -608,7 +608,7 @@ python<span class="w"> </span>build_versions.py<span class="w"> </span>-A<span c
 </ul>
 </section>
 <section id="q3">
-<h3>Q3: 外链不显示<a class="headerlink" href="#q3" title="Link to this heading">#</a></h3>
+<h3>Q3: 外链不显示<a class="headerlink" href="#q3" title="链接到此标题。">#</a></h3>
 <p><strong>A</strong>:</p>
 <ol class="arabic simple">
 <li><p>检查 <code class="docutils literal notranslate"><span class="pre">external_links.yaml</span></code> 配置是否正确</p></li>
@@ -617,7 +617,7 @@ python<span class="w"> </span>build_versions.py<span class="w"> </span>-A<span c
 </ol>
 </section>
 <section id="q4">
-<h3>Q4: 中文文档链接不存在<a class="headerlink" href="#q4" title="Link to this heading">#</a></h3>
+<h3>Q4: 中文文档链接不存在<a class="headerlink" href="#q4" title="链接到此标题。">#</a></h3>
 <p><strong>A</strong>: 确保：</p>
 <ul class="simple">
 <li><p>中文文档以 <code class="docutils literal notranslate"><span class="pre">_ZH.md</span></code> 或 <code class="docutils literal notranslate"><span class="pre">_ZH.rst</span></code> 结尾</p></li>
@@ -625,7 +625,7 @@ python<span class="w"> </span>build_versions.py<span class="w"> </span>-A<span c
 </ul>
 </section>
 <section id="q5">
-<h3>Q5: 版本切换后页面不存在<a class="headerlink" href="#q5" title="Link to this heading">#</a></h3>
+<h3>Q5: 版本切换后页面不存在<a class="headerlink" href="#q5" title="链接到此标题。">#</a></h3>
 <p><strong>A</strong>: 不同版本的文档结构可能不同：</p>
 <ul class="simple">
 <li><p>旧版本可能没有某些新页面</p></li>
@@ -634,7 +634,7 @@ python<span class="w"> </span>build_versions.py<span class="w"> </span>-A<span c
 </section>
 </section>
 <section id="id8">
-<h2>贡献指南<a class="headerlink" href="#id8" title="Link to this heading">#</a></h2>
+<h2>贡献指南<a class="headerlink" href="#id8" title="链接到此标题。">#</a></h2>
 <p>欢迎为模板贡献改进！❤</p>
 </section>
 </section>
@@ -738,7 +738,7 @@ python<span class="w"> </span>build_versions.py<span class="w"> </span>-A<span c
         <div class="footer-item">
 
   <p class="sphinx-version">
-    由 <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3创建。
+    由 <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.0.4创建。
     <br/>
   </p>
 </div>

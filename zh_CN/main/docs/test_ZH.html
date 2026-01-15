@@ -41,11 +41,11 @@
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
     <script src="../_static/documentation_options.js?v=91bfbbb6"></script>
-    <script src="../_static/doctools.js?v=9bcbadda"></script>
-    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="../_static/copybutton.js?v=f281be69"></script>
-    <script src="../_static/translations.js?v=beaddf03"></script>
+    <script src="../_static/translations.js?v=540d3cec"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'docs/test_ZH';</script>
     <script src="../_static/sidebar.js?v=3fc1065c"></script>
     <script src="../_static/switcher-mobile.js?v=07875724"></script>
@@ -533,7 +533,7 @@
                 <article class="bd-article">
                   
   <section id="id1">
-<h1>测试文档<a class="headerlink" href="#id1" title="Link to this heading">#</a></h1>
+<h1>测试文档<a class="headerlink" href="#id1" title="链接到此标题。">#</a></h1>
 <p>这是一个测试文档。它位于根目录下的 <code class="docutils literal notranslate"><span class="pre">docs/test_ZH.md</span></code>，具有中英两个版本。</p>
 <p>如果你能看到这个文档，说明 <a class="reference external" href="https://github.com/cmgzn/data-juicer-sphinx/blob/main/docs/sphinx_doc/build_versions.py">脚本</a> 成功在 Sphinx 构建前，将项目中的外部 Markdown 文档复制到了 Sphinx 源目录（<code class="docutils literal notranslate"><span class="pre">docs/sphinx_doc/source/docs_index/</span></code>），从而使其能被正常构建。</p>
 <blockquote>
@@ -543,7 +543,7 @@
 </div></blockquote>
 <p>只要在 <code class="docutils literal notranslate"><span class="pre">docs/sphinx_doc/source/docs_index/index.rst</span></code>（英文）和 <code class="docutils literal notranslate"><span class="pre">index_ZH.rst</span></code>（中文）中通过 <code class="docutils literal notranslate"><span class="pre">:glob:</span></code> 正确引用这些文件，通常它们会像本文档一样出现在最终站点中。</p>
 <section id="id2">
-<h2>示例<a class="headerlink" href="#id2" title="Link to this heading">#</a></h2>
+<h2>示例<a class="headerlink" href="#id2" title="链接到此标题。">#</a></h2>
 <div class="highlight-rst notranslate"><div class="highlight"><pre><span></span><span class="gh">====</span>
 <span class="gh">文档</span>
 <span class="gh">====</span>
@@ -566,9 +566,9 @@
 <p><code class="docutils literal notranslate"><span class="pre">docs/*</span></code> 将匹配所有从 <code class="docutils literal notranslate"><span class="pre">docs/</span></code> 目录复制过来的文件，例如本文档。</p>
 </section>
 <section id="id3">
-<h2>媒体资源引用<a class="headerlink" href="#id3" title="Link to this heading">#</a></h2>
+<h2>媒体资源引用<a class="headerlink" href="#id3" title="链接到此标题。">#</a></h2>
 <section id="id4">
-<h3>图片显示<a class="headerlink" href="#id4" title="Link to this heading">#</a></h3>
+<h3>图片显示<a class="headerlink" href="#id4" title="链接到此标题。">#</a></h3>
 <p>你可以在 Markdown 文档中使用相对路径直接引用项目中的图片、视频等媒体资源：</p>
 <div class="highlight-markdown notranslate"><div class="highlight"><pre><span></span>![<span class="nt">示例图片</span>](<span class="na">https://github.com/cmgzn/data-juicer-sphinx/blob/main/docs/imgs/TEST.png</span>)
 </pre></div>
@@ -581,7 +581,7 @@
 <img src="imgs/TEST.png" width="70%" height="70%">
 </section>
 <section id="id5">
-<h3>资源管理配置<a class="headerlink" href="#id5" title="Link to this heading">#</a></h3>
+<h3>资源管理配置<a class="headerlink" href="#id5" title="链接到此标题。">#</a></h3>
 <p>为了确保媒体资源能够正确地被构建和显示，需要配置 <a class="reference external" href="https://github.com/cmgzn/data-juicer-sphinx/blob/main/docs/sphinx_doc/source/extra_assets.yaml">extra_assets.yaml</a> 文件，指定媒体资源存放的路径（相对于项目根目录）。例如：</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">assets_dirs</span><span class="p">:</span>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">docs/imgs</span>
@@ -591,7 +591,7 @@
 <p>构建脚本会自动将这些目录中的资源文件复制到 Sphinx 构建输出目录中，确保在最终生成的网站中可以正常访问这些资源。</p>
 </section>
 <section id="id6">
-<h3>使用说明<a class="headerlink" href="#id6" title="Link to this heading">#</a></h3>
+<h3>使用说明<a class="headerlink" href="#id6" title="链接到此标题。">#</a></h3>
 <ol class="arabic simple">
 <li><p><strong>放置资源文件</strong>：将图片、视频等媒体文件放在项目根目录下的指定文件夹中（如 <code class="docutils literal notranslate"><span class="pre">imgs/</span></code>）</p></li>
 <li><p><strong>配置资源路径</strong>：在 <a class="reference external" href="https://github.com/cmgzn/data-juicer-sphinx/blob/main/docs/sphinx_doc/source/extra_assets.yaml">extra_assets.yaml</a> 中声明资源所在的目录</p></li>
@@ -603,9 +603,9 @@
 </section>
 </section>
 <section id="id7">
-<h2>仓库内链接的自动映射<a class="headerlink" href="#id7" title="Link to this heading">#</a></h2>
+<h2>仓库内链接的自动映射<a class="headerlink" href="#id7" title="链接到此标题。">#</a></h2>
 <section id="id8">
-<h3>什么是仓库内链接？<a class="headerlink" href="#id8" title="Link to this heading">#</a></h3>
+<h3>什么是仓库内链接？<a class="headerlink" href="#id8" title="链接到此标题。">#</a></h3>
 <p>在 Markdown 中，你可以使用相对路径引用代码库中的其他文件，例如：</p>
 <div class="highlight-markdown notranslate"><div class="highlight"><pre><span></span>[<span class="nt">查看脚本</span>](<span class="na">https://github.com/cmgzn/data-juicer-sphinx/blob/main/docs/sphinx_doc/build_versions.py</span>)
 [<span class="nt">配置文件</span>](<span class="na">https://github.com/cmgzn/data-juicer-sphinx/blob/main/docs/sphinx_doc/source/extra_assets.yaml</span>)
@@ -615,7 +615,7 @@
 <p>这些 <code class="docutils literal notranslate"><span class="pre">./xxx</span></code> 或 <code class="docutils literal notranslate"><span class="pre">path/to/file</span></code> 形式的相对链接指向的是项目仓库内部的文件</p>
 </section>
 <section id="id9">
-<h3>自动映射<a class="headerlink" href="#id9" title="Link to this heading">#</a></h3>
+<h3>自动映射<a class="headerlink" href="#id9" title="链接到此标题。">#</a></h3>
 <p>构建脚本会自动将这些仓库内的相对链接转换为 GitHub 仓库的链接。首先，请确保已经正确设置以下环境变量：</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">PROJECT</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;your-project-name&quot;</span><span class="w">        </span><span class="c1"># 例如：data-juicer-hub</span>
 <span class="nb">export</span><span class="w"> </span><span class="nv">REPO_OWNER</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;your-repo-owner&quot;</span><span class="w">       </span><span class="c1"># 例如：datajuicer</span>
@@ -736,7 +736,7 @@
         <div class="footer-item">
 
   <p class="sphinx-version">
-    由 <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3创建。
+    由 <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.0.4创建。
     <br/>
   </p>
 </div>
