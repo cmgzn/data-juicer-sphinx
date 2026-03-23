@@ -112,3 +112,13 @@ https://github.com/datajuicer/data-juicer-sphinx/blob/main/docs/sphinx_doc/build
 ```
 
 If multi-version builds are enabled, the links will also automatically point to the corresponding version branches.
+
+## Markdown Rendering Tests
+
+- ~~This is a strikethrough Test~~
+- **Bold text**: **This is bold**
+- *Italic text*: *This is italic*
+- ***Bold and italic***: ***This is both***
+- `Inline code`: `print("hello")`
+- > Blockquote: > This is a quote
+- [Link](https://example.com): [Example Link](https://example.com)

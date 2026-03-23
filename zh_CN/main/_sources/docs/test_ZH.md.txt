@@ -112,3 +112,13 @@ https://github.com/datajuicer/data-juicer-sphinx/blob/main/docs/sphinx_doc/build
 ```
 
 如果启用了多版本构建，链接还会自动指向对应的版本分支。
+
+## Markdown 渲染测试
+
+- ~~这是一条删除线测试~~
+- **粗体**：**这是粗体**
+- *斜体*：*这是斜体*
+- ***粗斜体***：***这是粗斜体***
+- `行内代码`：`print("hello")`
+- > 引用块：> 这是一段引用
+- [链接](https://example.com)：[示例链接](https://example.com)
