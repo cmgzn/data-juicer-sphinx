@@ -22,6 +22,8 @@ jobs:
       PROJECT: ${{ github.event.repository.name }}
       REPO_OWNER: ${{ github.repository_owner }}
       JUICER_API_URL: ${{ vars.JUICER_API_URL }}
+      GITHUB_OAUTH_CLIENT_ID: ${{ vars.GITHUB_OAUTH_CLIENT_ID }}
+      STAR_API_BASE_URL: ${{ vars.STAR_API_BASE_URL }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4

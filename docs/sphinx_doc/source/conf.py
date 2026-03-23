@@ -25,6 +25,10 @@ REPO_ROOT = os.environ.get("REPO_ROOT")
 # QA Copilot configuration
 JUICER_API_URL = os.environ.get("JUICER_API_URL", "https://datajuicer.online:443")
 
+# Star widget configuration
+GITHUB_OAUTH_CLIENT_ID = os.environ.get("GITHUB_OAUTH_CLIENT_ID", "")
+STAR_API_BASE_URL = os.environ.get("STAR_API_BASE_URL", "")
+
 # -- Path setup --------------------------------------------------------------
 current_dir = os.path.dirname(__file__)
 if REPO_ROOT and os.path.isdir(REPO_ROOT):
@@ -83,7 +87,7 @@ html_theme_options = {
     },
     "navbar_start": ["navbar-logo"],
     "navbar_center": ["navbar-nav"],
-    "navbar_end": ["navbar-icon-links", "theme-switcher", "version-language-switcher"],
+    "navbar_end": ["navbar-icon-links", "star-navbar-btn", "theme-switcher", "version-language-switcher"],
     "navbar_persistent": ["search-button"],
     "icon_links": [
         {
@@ -232,6 +236,8 @@ html_context = {
     "github_version": GIT_REF_FOR_LINKS,
     "doc_path": "docs",
     "juicer_api_url": JUICER_API_URL,
+    "github_oauth_client_id": GITHUB_OAUTH_CLIENT_ID,
+    "star_api_base_url": STAR_API_BASE_URL,
 }
 
 
@@ -327,6 +333,18 @@ def setup(app):
     if JUICER_API_URL:
         qa_config_js = f"window.JUICER_API_URL = '{JUICER_API_URL}';"
         app.add_js_file(None, body=qa_config_js, priority=100)
+
+    # Add Star widget configuration as inline JavaScript
+    if GITHUB_OAUTH_CLIENT_ID:
+        star_config_js = (
+            f"window.GITHUB_OAUTH_CLIENT_ID = '{GITHUB_OAUTH_CLIENT_ID}';"
+            f"window.STAR_REPO_OWNER = '{REPO_OWNER}';"
+            f"window.STAR_REPO_NAME = '{PROJECT}';"
+            f"window.STAR_API_BASE_URL = '{STAR_API_BASE_URL}';"
+        )
+        app.add_js_file(None, body=star_config_js, priority=100)
+        app.config.html_js_files.append("star-widget.js")
+        app.config.html_css_files.append("star-widget.css")
 
     app.connect("source-read", process_read)
     app.connect("autodoc-skip-member", skip)

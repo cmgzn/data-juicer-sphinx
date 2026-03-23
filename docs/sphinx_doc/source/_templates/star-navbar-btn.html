@@ -1,0 +1,12 @@
+{% if github_oauth_client_id and star_api_base_url %}
+<a id="star-navbar-btn"
+   class="star-navbar-btn"
+   href="#"
+   role="button"
+   aria-label="Star this repo on GitHub">
+  <span class="star-navbar-btn__icon" aria-hidden="true">⭐</span>
+  <span class="star-navbar-btn__label">
+    {%- if language == 'zh_CN' -%}一键星标{%- else -%}Star me!{%- endif -%}
+  </span>
+</a>
+{% endif %}
