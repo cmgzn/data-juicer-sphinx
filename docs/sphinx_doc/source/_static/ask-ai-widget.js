@@ -760,11 +760,28 @@ var AskAIWidget = (function () {
         this.sendBtn.addEventListener('click', onSend);
 
         // Handle Enter key in input
+        // Track IME (Input Method Editor) composition state to avoid sending
+        // the message when the user is just confirming a candidate (e.g.
+        // typing English letters under a Chinese IME).
+        let isComposing = false;
+        this.input.addEventListener('compositionstart', () => {
+          isComposing = true;
+        });
+        this.input.addEventListener('compositionend', () => {
+          isComposing = false;
+        });
+
         this.input.addEventListener('keydown', (e) => {
-          if (e.key === 'Enter' && !e.shiftKey) {
-            e.preventDefault();
-            onSend();
-          }
+          // Skip Enter when:
+          // - it is not a plain Enter (Shift+Enter inserts a newline);
+          // - the IME is composing: `isComposing` flag, the standard
+          //   `e.isComposing`, or the legacy `keyCode === 229` for
+          //   Safari / older browsers where `isComposing` is unreliable.
+          if (e.key !== 'Enter' || e.shiftKey) return;
+          if (isComposing || e.isComposing || e.keyCode === 229) return;
+
+          e.preventDefault();
+          onSend();
         });
       }
 
