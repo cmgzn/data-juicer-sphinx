@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Frequently Asked Questions — data-juicer-sphinx</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" id="pygments-dark-css" href="../_static/pygments_dark.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/copybutton.css" type="text/css" />
+  <link rel="icon" href="../_static/icon.png" />
+
+  <script>
+  (function(){var t=localStorage.getItem('dj-theme')||(window.matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light');document.documentElement.setAttribute('data-theme',t);var d=document.getElementById('pygments-dark-css');if(d){d.disabled=(t!=='dark')}})();
+  </script>
+</head>
+<body>
+  <header class="navbar">
+    <div class="navbar-inner">
+      <div class="navbar-left">
+        <button class="sidebar-toggle" aria-label="Toggle sidebar" id="sidebar-toggle">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+            <path d="M3 5h14M3 10h14M3 15h14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+        </button>
+        <a href="../index.html" class="navbar-brand">
+          <img src="../_static/images/icon.png" alt="data-juicer-sphinx" class="navbar-logo" />
+          <span class="navbar-title">data-juicer-sphinx</span>
+        </a>
+      </div>
+
+      <nav class="navbar-center">
+        <a href="https://datajuicer.github.io/data-juicer/en/main/" class="navbar-link" target="_blank" rel="noopener">Core<svg class="external-icon" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 1.5h7v7M10.5 1.5L4 8"/></svg></a>
+        <a href="https://datajuicer.github.io/data-juicer-sandbox/en/main/" class="navbar-link" target="_blank" rel="noopener">Sandbox<svg class="external-icon" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 1.5h7v7M10.5 1.5L4 8"/></svg></a>
+        <a href="https://datajuicer.github.io/data-juicer-hub/en/main/" class="navbar-link" target="_blank" rel="noopener">Hub<svg class="external-icon" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 1.5h7v7M10.5 1.5L4 8"/></svg></a>
+        <a href="https://datajuicer.github.io/data-juicer-agents/en/main/" class="navbar-link" target="_blank" rel="noopener">Agents<svg class="external-icon" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 1.5h7v7M10.5 1.5L4 8"/></svg></a>
+      </nav>
+
+      <div class="navbar-right">
+        <button class="search-trigger" id="search-trigger" aria-label="Search">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5L14 14" stroke-linecap="round"/></svg>
+          <span>Search...</span>
+          <kbd>⌘K</kbd>
+        </button>
+        <div class="dropdown" id="lang-dropdown">
+          <button class="dropdown-trigger" aria-haspopup="true" aria-expanded="false">
+            <svg class="dropdown-icon-svg" width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="8" r="6.5"/><path d="M1.5 8h13M8 1.5c-2 2.5-2 10.5 0 13M8 1.5c2 2.5 2 10.5 0 13"/></svg>
+            <span class="dropdown-text">en</span>
+            <svg class="dropdown-chevron" width="12" height="12" viewBox="0 0 12 12"><path d="M3 4.5l3 3 3-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>
+          </button>
+          <div class="dropdown-panel">
+            <a href="../../../en/main/guides/faq.html" class="dropdown-item active">English</a>
+            <a href="../../../zh_CN/main/guides/faq_ZH.html" class="dropdown-item">简体中文</a>
+          </div>
+        </div>
+        <div class="dropdown" id="version-dropdown"
+             data-versions-url="https://cmgzn.github.io/data-juicer-sphinx/versions.json"
+             data-link-prefix="../../"
+             data-page="guides/faq"
+             data-current="main">
+          <button class="dropdown-trigger" aria-haspopup="true" aria-expanded="false">
+            <svg class="dropdown-icon-svg" width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 4l5.5 2.5L13.5 4M8 6.5V14"/><path d="M13.5 4v6l-5.5 4L2.5 10V4L8 1.5 13.5 4z"/></svg>
+            <span class="dropdown-text">main</span>
+            <svg class="dropdown-chevron" width="12" height="12" viewBox="0 0 12 12"><path d="M3 4.5l3 3 3-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>
+          </button>
+          <div class="dropdown-panel">
+            <a href="../../main/guides/faq.html" class="dropdown-item active">main</a>
+          </div>
+        </div>
+
+        <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode">
+          <svg class="icon-sun" width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="3.5" stroke="currentColor" stroke-width="1.5"/><path d="M9 1.5v2M9 14.5v2M1.5 9h2M14.5 9h2M3.7 3.7l1.4 1.4M12.9 12.9l1.4 1.4M3.7 14.3l1.4-1.4M12.9 5.1l1.4-1.4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          <svg class="icon-moon" width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M15.75 9.59A6.75 6.75 0 1 1 8.41 2.25 5.25 5.25 0 0 0 15.75 9.59z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <a href="https://github.com/cmgzn/data-juicer-sphinx" class="navbar-icon-link" target="_blank" rel="noopener" aria-label="GitHub">
+          <svg width="20" height="20" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <div class="page-wrapper">
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-inner">
+        <nav class="sidebar-nav" aria-label="Main navigation">
+          <ul class="sidebar-home">
+            <li class="">
+              <a href="../index.html">Home</a>
+            </li>
+          </ul>
+          <p class="caption" role="heading"><span class="caption-text">Guides</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="setup.html">Enable This Template for Your Project</a></li>
+<li class="toctree-l1"><a class="reference internal" href="deployment.html">Deploy with GitHub Actions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="writing.html">Writing Documentation</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Frequently Asked Questions</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../docs/how_it_works.html">How It Works</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../docs/ask_ai_widget.html">Ask-AI Widget Development</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../api.html">API</a><ul class="simple">
+</ul>
+</li>
+</ul>
+
+        </nav>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      <div class="content-wrapper">
+        <article class="article" role="main">
+  <section id="frequently-asked-questions">
+<h1>Frequently Asked Questions<a class="headerlink" href="#frequently-asked-questions" title="Link to this heading">¶</a></h1>
+<section id="q1-build-fails-with-module-not-found-error">
+<h2>Q1: Build fails with “module not found” error<a class="headerlink" href="#q1-build-fails-with-module-not-found-error" title="Link to this heading">¶</a></h2>
+<p><strong>A</strong>: Ensure all dependencies are installed before building:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>uv<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>.
+</pre></div>
+</div>
+</section>
+<section id="q2-api-documentation-isn-t-generated">
+<h2>Q2: API documentation isn’t generated<a class="headerlink" href="#q2-api-documentation-isn-t-generated" title="Link to this heading">¶</a></h2>
+<p><strong>A</strong>: Check the following:</p>
+<ul class="simple">
+<li><p>Ensure you didn’t use the <code class="docutils literal notranslate"><span class="pre">--no-api-doc</span></code> or <code class="docutils literal notranslate"><span class="pre">-A</span></code> flags</p></li>
+<li><p>Verify your project contains importable Python modules</p></li>
+<li><p>Confirm the <code class="docutils literal notranslate"><span class="pre">CODE_ROOT</span></code> environment variable is correctly set</p></li>
+</ul>
+</section>
+<section id="q3-external-links-aren-t-displayed">
+<h2>Q3: External links aren’t displayed<a class="headerlink" href="#q3-external-links-aren-t-displayed" title="Link to this heading">¶</a></h2>
+<p><strong>A</strong>:</p>
+<ol class="arabic simple">
+<li><p>Verify that <code class="docutils literal notranslate"><span class="pre">external_links.yaml</span></code> is configured correctly</p></li>
+<li><p>Ensure the <code class="docutils literal notranslate"><span class="pre">PROJECT</span></code> environment variable is properly set</p></li>
+<li><p>Check the browser console for JavaScript errors</p></li>
+</ol>
+</section>
+<section id="q4-chinese-documentation-links-don-t-exist">
+<h2>Q4: Chinese documentation links don’t exist<a class="headerlink" href="#q4-chinese-documentation-links-don-t-exist" title="Link to this heading">¶</a></h2>
+<p><strong>A</strong>: Ensure:</p>
+<ul class="simple">
+<li><p>Chinese documentation files end with <code class="docutils literal notranslate"><span class="pre">_ZH.md</span></code> or <code class="docutils literal notranslate"><span class="pre">_ZH.rst</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">index_ZH.rst</span></code> exists and is correctly configured</p></li>
+</ul>
+</section>
+<section id="q5-page-doesn-t-exist-after-switching-versions">
+<h2>Q5: Page doesn’t exist after switching versions<a class="headerlink" href="#q5-page-doesn-t-exist-after-switching-versions" title="Link to this heading">¶</a></h2>
+<p><strong>A</strong>: Documentation structures may differ between versions:</p>
+<ul class="simple">
+<li><p>Older versions might lack certain new pages</p></li>
+<li><p>Version switching tries to access the same path; if unavailable, it redirects to the homepage</p></li>
+</ul>
+</section>
+<section id="q6-orphan-pages-left-on-the-site-or-old-tags-still-use-an-outdated-theme">
+<h2>Q6: Orphan pages left on the site, or old tags still use an outdated theme<a class="headerlink" href="#q6-orphan-pages-left-on-the-site-or-old-tags-still-use-an-outdated-theme" title="Link to this heading">¶</a></h2>
+<p><strong>A</strong>: Incremental deployment never deletes files, and tag pages keep the theme they were published with. Run a manual full rebuild to fix both: trigger <code class="docutils literal notranslate"><span class="pre">workflow_dispatch</span></code> with <code class="docutils literal notranslate"><span class="pre">full:</span> <span class="pre">true</span></code> (see <a class="reference internal" href="deployment.html"><span class="std std-doc">Deploy with GitHub Actions</span></a>). It rebuilds every version and replaces the whole site, cleaning up orphan files and refreshing the theme everywhere.</p>
+</section>
+</section>
+
+
+        </article>
+        <aside class="toc-sidebar">
+          <div class="toc-sidebar-inner">
+            <p class="toc-title">On this page</p>
+            <ul>
+<li><a class="reference internal" href="#">Frequently Asked Questions</a><ul>
+<li><a class="reference internal" href="#q1-build-fails-with-module-not-found-error">Q1: Build fails with “module not found” error</a></li>
+<li><a class="reference internal" href="#q2-api-documentation-isn-t-generated">Q2: API documentation isn’t generated</a></li>
+<li><a class="reference internal" href="#q3-external-links-aren-t-displayed">Q3: External links aren’t displayed</a></li>
+<li><a class="reference internal" href="#q4-chinese-documentation-links-don-t-exist">Q4: Chinese documentation links don’t exist</a></li>
+<li><a class="reference internal" href="#q5-page-doesn-t-exist-after-switching-versions">Q5: Page doesn’t exist after switching versions</a></li>
+<li><a class="reference internal" href="#q6-orphan-pages-left-on-the-site-or-old-tags-still-use-an-outdated-theme">Q6: Orphan pages left on the site, or old tags still use an outdated theme</a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </aside>
+      </div>
+      <nav class="prev-next">
+        <a href="writing.html" class="prev-next-link prev">
+          <span class="prev-next-label">Previous</span>
+          <span class="prev-next-title">Writing Documentation</span>
+        </a>
+        <a href="../docs/how_it_works.html" class="prev-next-link next">
+          <span class="prev-next-label">Next</span>
+          <span class="prev-next-title">How It Works</span>
+        </a>
+      </nav>
+      <footer class="footer">
+        <p>© 2024, Data-Juicer Team — Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> &amp; Data-Juicer Theme</p>
+      </footer>
+    </main>
+  </div>
+
+  <div class="sidebar-overlay" id="sidebar-overlay"></div>
+
+  <!-- Search Modal -->
+  <div class="search-overlay" id="search-overlay">
+    <div class="search-modal">
+      <div class="search-modal-input">
+        <svg width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5L14 14" stroke-linecap="round"/></svg>
+        <input type="text" id="search-modal-input" placeholder="Search documentation..." autocomplete="off" />
+      </div>
+      <div class="search-modal-results" id="search-modal-results"></div>
+      <div class="search-modal-footer">
+        <span><kbd>↵</kbd> to select</span>
+        <span><kbd>↑↓</kbd> to navigate</span>
+        <span><kbd>esc</kbd> to close</span>
+      </div>
+    </div>
+  </div>
+  <script src="../_static/js/theme.js"></script>
+  <script src="../_static/documentation_options.js"></script>
+  <script src="../_static/doctools.js"></script>
+  <script src="../_static/sphinx_highlight.js"></script>
+  <script src="../_static/clipboard.min.js"></script>
+  <script src="../_static/copybutton.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+</body>
+</html>
