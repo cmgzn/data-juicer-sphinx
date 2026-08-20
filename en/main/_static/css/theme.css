@@ -412,11 +412,11 @@ a:hover {
   padding-left: 0.75rem;
   border-left: 1px solid var(--border-light);
   margin-left: 0.75rem;
-  display: none;
+  display: none !important;
 }
 
 .sidebar-nav li.expanded > ul {
-  display: block;
+  display: block !important;
 }
 
 .sidebar-nav li.has-children > a {
@@ -514,6 +514,12 @@ a:hover {
   border-left: 1px solid var(--border-light);
 }
 
+.toc-sidebar ul ul {
+  border-left: none;
+  padding-left: 0;
+  margin-left: 0;
+}
+
 .toc-sidebar li {
   margin: 0;
 }
@@ -526,6 +532,17 @@ a:hover {
   border-left: 2px solid transparent;
   margin-left: -1px;
   transition: all 0.15s ease;
+}
+
+/* Nested TOC levels: progressive indentation */
+.toc-sidebar ul ul a {
+  padding-left: 1.75rem;
+  font-size: 0.75rem;
+}
+
+.toc-sidebar ul ul ul a {
+  padding-left: 2.5rem;
+  font-size: 0.75rem;
 }
 
 .toc-sidebar a:hover {
