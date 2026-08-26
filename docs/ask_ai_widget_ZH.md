@@ -1,4 +1,4 @@
-# Ask AI Widget - Build Instructions
+# Ask-AI 组件开发指南
 
 ## 📁 项目结构
 
@@ -10,11 +10,14 @@ docs/sphinx_doc/source/_static/
 │   ├── ask-ai-ui.js            # UI 渲染和交互
 │   └── ask-ai-widget.js        # 主控制器
 ├── ask-ai-widget.js            # 打包后的单文件（用于生产）
-├── ask-ai-widget.js.backup     # 原始文件备份
+├── ask-ai-widget.css           # 组件样式（跟随明暗主题）
 ├── package.json                # Node.js 依赖配置
-├── rollup.config.js            # Rollup 打包配置
-└── BUILD.md                    # 本文档
+└── rollup.config.js            # Rollup 打包配置
 ```
+
+> 本文档位于 `docs/ask_ai_widget.md`（会渲染进站点），不在 `_static/` 内。
+
+> 组件仅在配置了 `JUICER_API_URL` 时才会加载（见 `docs/sphinx_doc/source/conf.py`）。
 
 ## 🚀 快速开始
 
@@ -66,9 +69,9 @@ npm run watch
 - **功能**：UI 渲染和交互
 - **导出**：`AskAIUI` 类
 - **职责**：
-  - DOM 创建和管理
+  - DOM 创建和管理（底部浮动输入栏、选中文本提问气泡、可拖拽调宽侧边面板）
   - 事件绑定
-  - 消息渲染
+  - 消息渲染（流式回复、思考过程、工具调用、反馈按钮）
   - 主题切换
   - Markdown 渲染
 - **大小**：约 12KB
@@ -124,7 +127,7 @@ npm run watch
 
 如果构建失败，检查：
 
-1. Node.js 版本是否 >= 14
+1. Node.js 版本是否 >= 18（Rollup 4 要求；系统自带的 Node 12 会报语法错误）
 2. 依赖是否正确安装（`npm install`）
 3. 模块文件中是否有语法错误
 

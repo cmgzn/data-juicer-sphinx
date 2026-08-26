@@ -1,4 +1,4 @@
-# Ask AI Widget - Build Instructions
+# Ask-AI Widget Development
 
 ## 📁 Project Structure
 
@@ -10,11 +10,14 @@ docs/sphinx_doc/source/_static/
 │   ├── ask-ai-ui.js            # UI rendering and interaction
 │   └── ask-ai-widget.js        # Main controller
 ├── ask-ai-widget.js            # Bundled single file (for production)
-├── ask-ai-widget.js.backup     # Original file backup
+├── ask-ai-widget.css           # Widget styles (follows light/dark theme)
 ├── package.json                # Node.js dependency configuration
-├── rollup.config.js            # Rollup bundling configuration
-└── BUILD.md                    # This document
+└── rollup.config.js            # Rollup bundling configuration
 ```
+
+> This document lives at `docs/ask_ai_widget.md` (rendered in the built site), not inside `_static/`.
+
+> The widget is only loaded when `JUICER_API_URL` is configured (see `docs/sphinx_doc/source/conf.py`).
 
 ## 🚀 Quick Start
 
@@ -66,9 +69,9 @@ In development mode, any modifications to files in `ask-ai-modules/` will automa
 - **Purpose**: UI rendering and interaction
 - **Exports**: `AskAIUI` class
 - **Responsibilities**:
-  - DOM creation and management
+  - DOM creation and management (floating input bar, select-to-ask tooltip, resizable side panel)
   - Event binding
-  - Message rendering
+  - Message rendering (streaming replies, thinking blocks, tool calls, feedback buttons)
   - Theme switching
   - Markdown rendering
 - **Size**: ~12KB
@@ -124,7 +127,7 @@ If you need to add new functionality:
 
 If the build fails, check:
 
-1. Whether Node.js version is >= 14
+1. Whether Node.js version is >= 18 (Rollup 4 requires it; a system Node 12 will fail with syntax errors)
 2. Whether dependencies are correctly installed (`npm install`)
 3. Whether there are syntax errors in the module files
 

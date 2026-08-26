@@ -1,3 +1,7 @@
+[build-system]
+requires = ["setuptools>=68.0"]
+build-backend = "setuptools.build_meta"
+
 [project]
 name = "data-juicer-sphinx"
 version = "0.1.0"
@@ -7,13 +11,21 @@ requires-python = ">=3.11"
 dependencies = [
     "linkify-it-py>=2.0.3",
     "myst-parser>=4.0.1",
-    "pydata-sphinx-theme==0.16.1",
     "sphinx",
     "sphinx-copybutton>=0.5.2",
     "translators>=6.0.1",
     "numpy<=2.2.0",
 ]
 
+[project.entry-points."sphinx.html_themes"]
+data_juicer_theme = "data_juicer_sphinx_theme"
 
 [tool.setuptools.packages.find]
-include = ["docs/sphinx_doc"]
+include = ["docs/sphinx_doc", "data_juicer_sphinx_theme*"]
+
+[tool.setuptools.package-data]
+data_juicer_sphinx_theme = [
+    "theme.conf",
+    "*.html",
+    "static/**/*",
+]

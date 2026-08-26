@@ -72,55 +72,19 @@ templates_path = ["_templates"]
 exclude_patterns = ["build"]
 
 # -- Options for HTML output ------------------------------------------------
-html_theme = "pydata_sphinx_theme"
+html_theme = "data_juicer_theme"
 html_title = HTML_TITLE
 
 html_theme_options = {
-    "logo": {
-        "text": HTML_TITLE,
-        "image_light": "_static/images/icon.png",
-        "image_dark": "_static/images/icon.png",
-    },
-    "navbar_start": ["navbar-logo"],
-    "navbar_center": ["navbar-nav"],
-    "navbar_end": ["navbar-icon-links", "theme-switcher", "version-language-switcher"],
-    "navbar_persistent": ["search-button"],
-    "icon_links": [
-        {
-            "name": "GitHub",
-            "url": f"https://github.com/{REPO_OWNER}/{PROJECT}",
-            "icon": "fa-brands fa-github",
-            "type": "fontawesome",
-        },
-    ],
-    # navigation settings
-    "show_toc_level": 0,
-    "navigation_depth": 3,
-    "show_nav_level": 1,
-    "show_prev_next": True,
-    # edit button
-    "use_edit_page_button": False,
-    # footer
-    "footer_start": ["copyright"],
-    "footer_end": ["sphinx-version", "theme-version"],
-    # search
-    "search_bar_text": "Search docs...",
-    # other options
-    "collapse_navigation": True,
-    "navigation_with_keys": True,
-}
-
-html_sidebars = {
-    "**": [
-        "sidebar-nav-bs",
-    ],
+    "logo": "images/icon.png",
+    "logo_dark": "images/icon.png",
+    "github_url": f"https://github.com/{REPO_OWNER}/{PROJECT}",
+    "project_name": HTML_TITLE,
 }
 
 # Static files
-html_css_files = ["custom.css"]
+html_css_files = []
 html_js_files = [
-    "sidebar.js",
-    "switcher-mobile.js",
     "https://cdn.jsdelivr.net/npm/marked/marked.min.js",
 ]
 if JUICER_API_URL:
@@ -227,6 +191,7 @@ html_context = {
     "get_lang_link": get_lang_link,
     "current_version": CURRENT_VERSION,
     "available_versions": AVAILABLE_VERSIONS,
+    "versions_json_url": f"https://{REPO_OWNER}.github.io/{PROJECT}/versions.json",
     "github_user": REPO_OWNER,
     "github_repo": PROJECT,
     "github_version": GIT_REF_FOR_LINKS,
@@ -289,7 +254,10 @@ def process_doc_links(app, docname, source):
         abs_path = os.path.normpath(os.path.join(os.path.dirname(docname), path))
         return f"[{text}]({repo_base}{abs_path})"
 
-    pattern = r"\[([^\]]+)\]\((?!http|#)([^)]*(?<!\.md)(?<!\.rst))\)"
+    # .md/.rst links are resolved by Sphinx itself; media assets (images,
+    # videos, ...) must stay relative so they load from the built site
+    # instead of a GitHub blob page.
+    pattern = r"\[([^\]]+)\]\((?!http|#)([^)]*(?<!\.md)(?<!\.rst)(?<!\.png)(?<!\.jpg)(?<!\.jpeg)(?<!\.gif)(?<!\.svg)(?<!\.webp)(?<!\.mp4)(?<!\.webm))\)"
     source[0] = re.sub(pattern, link_replacer, source[0])
     return source[0]
 
@@ -321,6 +289,9 @@ def setup(app):
         current_project=PROJECT, language=app.config.language, version=CURRENT_VERSION
     )
     app.config.html_theme_options.update({"external_links": external_links})
+    app.config.html_theme_options.update(
+        {"home_label": "首页" if app.config.language == "zh_CN" else "Home"}
+    )
     app.config.root_doc = "index_ZH" if app.config.language == "zh_CN" else "index"
 
     # Add QA Copilot URL configuration as inline JavaScript

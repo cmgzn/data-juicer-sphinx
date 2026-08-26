@@ -1,19 +1,23 @@
 # Data-Juicer Sphinx Documentation Template
 
-This is a unified documentation build template designed for the Data-Juicer ecosystem. Built on Sphinx and pydata-sphinx-theme, it provides multi-version and multi-language documentation capabilities, ensuring consistent documentation appearance and user experience across all subprojects.
+This is a unified documentation build template designed for the Data-Juicer ecosystem. Built on Sphinx and the bundled `data_juicer_theme` (a modern custom theme), it provides multi-version and multi-language documentation capabilities, ensuring consistent documentation appearance and user experience across all subprojects.
 
 ## Features
 
 - **Unified Appearance**: All subprojects share the same documentation theme and styling.
-- **Multi-Version Support**: Automatically builds documentation for multiple Git branches and tags.
+- **Multi-Version Support**: Automatically builds documentation for multiple Git branches and tags, with incremental CI deployment (only the changed version is rebuilt; immutable tags are built once).
 - **Multi-Language Support**: Supports both English and Chinese by default.
 - **Ecosystem Interconnectivity**: Enables seamless navigation between different project documentations via header external links.
 - **Markdown-Friendly**: Automatically discovers and integrates Markdown documents within the project.
+- **AI Assistant**: Built-in "Ask Juicer" widget (floating input bar, select-to-ask, resizable side panel) with streaming responses, thinking-mode and tool-call display; activated automatically when `JUICER_API_URL` is configured.
 
 ## Project Structure
 
 ```
 data-juicer-sphinx/
+├── data_juicer_sphinx_theme/                    # Custom Sphinx theme package
+│   ├── theme.conf / layout.html / search.html   # Theme definition and templates
+│   └── static/                                  # Theme CSS/JS
 ├── docs/
 │   └── sphinx_doc/                              # Sphinx documentation build directory
 │       ├── build_versions.py                    # Multi-version build script (main entry point)
@@ -24,15 +28,13 @@ data-juicer-sphinx/
 │           ├── custom_myst.py                   # Custom MyST extension
 │           ├── external_links.yaml              # External project link configuration
 │           ├── index.rst / index_ZH.rst               # Home page (customization recommended)
-│           ├── docs_index.rst / docs_index_ZH.rst     # Documentation index page (customization recommended)
 │           ├── api.rst                          # API documentation index (customization recommended)
-│           ├── _static/                         # Static assets
-│           │   ├── custom.css                   # Custom styles
-│           │   └── images/                      # Logos and icons
-│           └── _templates/                      # Custom templates
-│               └── version-language-switcher.html
+│           └── _static/                         # Static assets
+│               ├── images/                      # Logos and icons
+│               ├── ask-ai-widget.js / .css      # Bundled Ask-AI widget and styles
+│               └── ask-ai-modules/              # Widget modular sources + rollup build
 ├── guides/                                      # Usage guides
-├── pyproject.toml                               # Project configuration
+├── pyproject.toml                               # Project configuration (registers the theme)
 ├── README.md                                    
 └── README_ZH.md                                 
 ```
@@ -53,53 +55,13 @@ python build_versions.py -A -l en
 
 ## Documentation
 
-[Here](https://datajuicer.github.io/data-juicer-sphinx/en/main/index.html)
+Read the docs online: [datajuicer.github.io/data-juicer-sphinx](https://datajuicer.github.io/data-juicer-sphinx/en/main/index.html)
 
-## Core Principles
-
-### **Isolated Build Environment (Git Worktree)**
-- Creates an independent Git worktree for each version (branch/tag) at `.worktrees/<version>`.
-- Automatically cleans up after building (unless `KEEP_WORKTREES=True` is set in `docs/sphinx_doc/build_versions.py`) to avoid polluting the main working directory.
-
-### **Documentation Content Aggregation**
-- Automatically scans the entire worktree to collect all `.md` and `.rst` files (excluding directories like `outputs`, `sphinx_doc`, `.github`, etc.).
-- Copies these files into a unified Sphinx source directory: `docs/sphinx_doc/source/`.
-- (Customized for Data-Juicer operator documentation) For subdirectories under `operators/`, automatically generates corresponding `index.rst` and `index_ZH.rst` files to facilitate categorized operator indexing.
-
-## Frequently Asked Questions
-
-### Q1: Build fails with "module not found" error
-
-**A**: Ensure all dependencies are installed before building:
-```bash
-uv pip install .
-```
-
-### Q2: API documentation isn't generated
-
-**A**: Check the following:
-- Ensure you didn't use the `--no-api-doc` or `-A` flags
-- Verify your project contains importable Python modules
-- Confirm the `CODE_ROOT` environment variable is correctly set
-
-### Q3: External links aren't displayed
-
-**A**:
-1. Verify that `external_links.yaml` is configured correctly
-2. Ensure the `PROJECT` environment variable is properly set
-3. Check the browser console for JavaScript errors
-
-### Q4: Chinese documentation links don't exist
-
-**A**: Ensure:
-- Chinese documentation files end with `_ZH.md` or `_ZH.rst`
-- `index_ZH.rst` exists and is correctly configured
-
-### Q5: Page doesn't exist after switching versions
-
-**A**: Documentation structures may differ between versions:
-- Older versions might lack certain new pages
-- Version switching attempts to access the same path; if unavailable, it redirects to the homepage
+- [Enable the Template](guides/setup.md) — integrate, customize, and build locally
+- [Deploy with GitHub Actions](guides/deployment.md) — incremental CI deployment
+- [Writing Documentation](guides/writing.md) — content, media assets, and link mapping
+- [FAQ](guides/faq.md)
+- [How It Works](docs/how_it_works.md) — build internals and the incremental pipeline
 
 ## Contribution Guide
 

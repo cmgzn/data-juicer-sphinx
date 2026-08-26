@@ -24,7 +24,7 @@ cp -r data-juicer-sphinx/docs/sphinx_doc your-project/docs/
 
 ### 方法 B：使用 GitHub Actions （用于自动部署）
 
-见[第 5 节](#5-github-actions-自动部署)
+见[使用 GitHub Actions 部署](deployment_ZH.md)——推荐的接入方式。
 
 ## 3. 自定义配置
 
@@ -40,7 +40,7 @@ export HTML_TITLE="Your Project Title"    # 例如：Data Juicer Hub（可选）
 export MIN_TAG="v0.0.1"               # 指定从此版本开始构建（可选）
 ```
 
-或在 GitHub Actions workflow 中设置（见第 5 节）。
+或在 GitHub Actions workflow 中设置（见[使用 GitHub Actions 部署](deployment_ZH.md)）。
 
 ### 3.2 自定义关键文件
 
@@ -48,10 +48,8 @@ export MIN_TAG="v0.0.1"               # 指定从此版本开始构建（可选�
 
 ```
 docs/sphinx_doc/source/
-├── index.rst              # 英文主页：项目介绍 + 页眉导航（DOCS/API）
-├── index_ZH.rst           # 中文主页：项目介绍 + 页眉导航（DOCS/API）
-├── docs_index.rst         # 英文文档索引
-├── docs_index_ZH.rst      # 中文文档索引
+├── index.rst              # 英文主页：README 内容 + 侧边栏分组导航
+├── index_ZH.rst           # 中文主页：README 内容 + 侧边栏分组导航
 ├── api.rst                # API 文档索引
 ├── external_links.yaml    # 项目外链
 └── extra_assets.yaml      # 额外资源
@@ -59,28 +57,37 @@ docs/sphinx_doc/source/
 
 **示例：`index.rst`**
 ```rst
-.. 项目介绍
+.. 主页内容
 .. 通常直接 include README.md 即可
 .. include:: README.md
    :parser: myst_parser.sphinx_
 
-.. 页眉导航
-.. 设置几个 toctree，页眉就会显示几个导航
-.. 此处建议只保留 DOCS 和 API，以免页眉导航过多
+.. 侧边栏导航
+.. 带 :caption: 的 :glob: toctree 会在主题左侧边栏中渲染为
+.. 默认展开的分组（如 "Guides"、"Documentation"）
 .. toctree::
    :maxdepth: 2
-   :caption: DOCS
+   :caption: Guides
+   :glob:
 
-   docs_index
+   guides/*
 
 .. toctree::
    :maxdepth: 2
-   :caption: API
+   :caption: Documentation
+   :glob:
+
+   docs/*
+
+.. toctree::
+   :hidden:
 
    api
 ```
 
-> 注意：extra_assets.yaml 的用法见[测试文档](../docs/test_ZH.md)
+> 提示：`:glob:` toctree 会自动收集文件，但按字母顺序排列；需要控制阅读顺序时请显式列出条目（本模板自身的 `index.rst` 就是这样写的）。
+
+> 注意：extra_assets.yaml 的用法见[文档写作指南](writing_ZH.md)
 
 ### 3.3 配置项目外链
 
@@ -175,107 +182,6 @@ python -m http.server 8000 --directory build
 # 或     http://localhost:8000/zh_CN/main/index_ZH.html
 ```
 
-## 5. GitHub Actions 自动部署
+## 下一步
 
-在你的项目中创建 `.github/workflows/docs.yml`：
-
-```yaml
-name: Deploy Sphinx documentation to Pages
-
-on:
-  pull_request:
-    types: [opened, synchronize]
-    paths:
-      - "docs/sphinx_doc/**/*"
-  push:
-    branches:
-      - main
-    tags:
-      - "v*"
-  workflow_dispatch:
-
-jobs:
-  pages:
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        python-version: ["3.11"]
-    env:
-      PROJECT: ${{ github.event.repository.name }}
-      REPO_OWNER: ${{ github.repository_owner }}
-      PACKAGE_DIR: "your-project-src"
-      HTML_TITLE: Your Project Title  # 可选：自定义标题
-      MIN_TAG: v0.0.0             # 可选：最小版本
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0  # 获取完整历史以支持多版本构建
-
-      - name: Setup Python ${{ matrix.python-version }}
-        uses: actions/setup-python@master
-        with:
-          python-version: ${{ matrix.python-version }}
-      - name: Install uv
-        uses: astral-sh/setup-uv@v7
-        with:
-          enable-cache: true
-      - name: Install dependencies with uv # 安装你的项目依赖
-        run: |
-          uv pip install --system --upgrade pip
-          uv pip install --system -e .[all]
-
-      - name: Fetch Data-Juicer Sphinx Template # 拉取模板覆盖docs/sphinx_doc，跳过自定义文件
-        run: |
-          set -e
-          echo "Cloning sphinx template..."
-          git clone --depth=1 https://github.com/datajuicer/data-juicer-sphinx.git /tmp/template
-          uv pip install --system -e /tmp/template
-          if [ -d "docs/sphinx_doc/source" ]; then
-            echo "Backing up custom files..."
-            mkdir -p /tmp/custom_files
-            cp -r docs/sphinx_doc/source /tmp/custom_files
-          fi
-          echo "Applying template..."
-          rm -rf docs/sphinx_doc
-          mkdir -p docs
-          cp -r /tmp/template/docs/sphinx_doc docs/
-          echo "Restoring custom files..."
-          cp -rf /tmp/custom_files/source/* docs/sphinx_doc/source
-          echo "Done!"
-      - name: Get git tags
-        run: |
-          git fetch --all --tags
-          git branch -a
-          git tag
-      - name: Build documentation
-        run: |
-          cd docs/sphinx_doc
-          python build_versions.py --tags
-
-      - name: Redirect index.html
-        run: |
-          REPOSITORY_OWNER="${GITHUB_REPOSITORY_OWNER}"
-          cd docs/sphinx_doc
-          cp ./redirect.html build/index.html
-          sed -i "s/\[REPOSITORY_OWNER\]/${REPOSITORY_OWNER}/g" build/index.html
-          sed -i "s/\[PROJECT\]/${PROJECT}/g" build/index.html
-          cp build/index.html build/404.html
-      - name: Upload Documentation
-        uses: actions/upload-artifact@v4
-        with:
-          name: SphinxDoc
-          path: "docs/sphinx_doc/build"
-
-      - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          if: ${{ github.event_name == 'push' && (github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/')) }}
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./docs/sphinx_doc/build
-          cname: your-domain.com  # 可选：如果使用自定义域名
-```
-
-**启用 GitHub Pages**：
-1. 进入仓库 Settings → Pages
-2. Source 选择 `gh-pages` 分支
-3. 保存后访问 `https://your-domain.github.io/your-project/`
+准备发布？继续阅读[使用 GitHub Actions 部署](deployment_ZH.md)。

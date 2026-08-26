@@ -11,6 +11,11 @@ on:
     tags:
       - "*"
   workflow_dispatch:
+    inputs:
+      full:
+        description: "Full rebuild of all versions (refreshes theme on old tags, cleans orphan files)"
+        type: boolean
+        default: false
 
 jobs:
   pages:
@@ -62,7 +67,24 @@ jobs:
         name: Build Documentation
         run: |
           cd docs/sphinx_doc
-          python build_versions.py --tags -A
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            # PR preview: build the checked-out code only, no worktree
+            python build_versions.py --current preview -A
+          elif [ "${{ github.event_name }}" = "workflow_dispatch" ] && [ "${{ inputs.full }}" = "true" ]; then
+            # Manual full rebuild: every branch and tag (orphan cleanup + theme refresh)
+            python build_versions.py --tags -A
+          elif [[ "${GITHUB_REF}" == refs/tags/* ]]; then
+            # Tag push: tags are immutable, build only this tag
+            python build_versions.py --branches --tags "${GITHUB_REF_NAME}" -A
+          else
+            # Branch push (main) or dispatch without full: build only branches
+            python build_versions.py -A
+          fi
+      - name: Generate versions.json
+        if: ${{ github.event_name == 'push' || github.event_name == 'workflow_dispatch' }}
+        run: |
+          cd docs/sphinx_doc
+          python build_versions.py --emit-versions-json
       - name: Redirect index.html
         run: |
           REPOSITORY_OWNER="${GITHUB_REPOSITORY_OWNER}"
@@ -77,7 +99,12 @@ jobs:
           name: SphinxDoc
           path: "docs/sphinx_doc/build"
       - uses: peaceiris/actions-gh-pages@v3
-        if: ${{ github.event_name == 'push' && (github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/')) }}
+        if: ${{ (github.event_name == 'push' && (github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/'))) || github.event_name == 'workflow_dispatch' }}
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: "docs/sphinx_doc/build"
+          # Incremental deploy: keep previously published versions untouched,
+          # only overwrite the version directory built in this run.
+          # A manual full rebuild (full=true) replaces the whole site so that
+          # orphan files from deleted versions/pages get cleaned up.
+          keep_files: ${{ !(github.event_name == 'workflow_dispatch' && inputs.full) }}

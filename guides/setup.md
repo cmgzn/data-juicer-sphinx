@@ -24,7 +24,7 @@ cp -r data-juicer-sphinx/docs/sphinx_doc your-project/docs/
 
 ### Method B: Using GitHub Actions (for automatic deployment)
 
-See [Section 5](#5-github-actions-automatic-deployment)
+See [Deploy with GitHub Actions](deployment.md) — the recommended approach.
 
 ## 3. Custom Configuration
 
@@ -40,7 +40,7 @@ export HTML_TITLE="Your Project Title"    # e.g.: Data Juicer Hub (optional)
 export MIN_TAG="v0.0.1"                   # Specify minimum version to build from (optional)
 ```
 
-Or set in GitHub Actions workflow (see Section 5).
+Or set in GitHub Actions workflow (see [Deploy with GitHub Actions](deployment.md)).
 
 ### 3.2 Customize Key Files
 
@@ -48,10 +48,8 @@ Customize the following files according to your project needs:
 
 ```
 docs/sphinx_doc/source/
-├── index.rst              # English homepage: project intro + header navigation (DOCS/API)
-├── index_ZH.rst           # Chinese homepage: project intro + header navigation (DOCS/API)
-├── docs_index.rst         # English docs index
-├── docs_index_ZH.rst      # Chinese docs index
+├── index.rst              # English homepage: README content + grouped sidebar navigation
+├── index_ZH.rst           # Chinese homepage: README content + grouped sidebar navigation
 ├── api.rst                # API documentation index
 ├── external_links.yaml    # External project links
 └── extra_assets.yaml      # Additional resources
@@ -59,28 +57,37 @@ docs/sphinx_doc/source/
 
 **Example: `index.rst`**
 ```rst
-.. Project Introduction
+.. Home page content
 .. Usually just include README.md directly
 .. include:: README.md
    :parser: myst_parser.sphinx_
 
-.. Header Navigation
-.. Set multiple toctrees to display multiple navigation items in header
-.. It's recommended to keep only DOCS and API to avoid cluttering the header
+.. Sidebar navigation
+.. Captioned glob toctrees render as always-expanded groups (e.g. "Guides",
+.. "Documentation") in the left sidebar of the theme
 .. toctree::
    :maxdepth: 2
-   :caption: DOCS
+   :caption: Guides
+   :glob:
 
-   docs_index
+   guides/*
 
 .. toctree::
    :maxdepth: 2
-   :caption: API
+   :caption: Documentation
+   :glob:
+
+   docs/*
+
+.. toctree::
+   :hidden:
 
    api
 ```
 
-> Note: For usage of extra_assets.yaml, see [Test Document](../docs/test.md)
+> Tip: a `:glob:` toctree collects files automatically but sorts them alphabetically; list entries explicitly when the reading order matters (as this template's own `index.rst` does).
+
+> Note: For usage of extra_assets.yaml, see [Writing Documentation](writing.md)
 
 ### 3.3 Configure External Project Links
 
@@ -175,107 +182,6 @@ python -m http.server 8000 --directory build
 # Or     http://localhost:8000/zh_CN/main/index_ZH.html
 ```
 
-## 5. GitHub Actions Automatic Deployment
+## Next Step
 
-Create `.github/workflows/docs.yml` in your project:
-
-```yaml
-name: Deploy Sphinx documentation to Pages
-
-on:
-  pull_request:
-    types: [opened, synchronize]
-    paths:
-      - "docs/sphinx_doc/**/*"
-  push:
-    branches:
-      - main
-    tags:
-      - "v*"
-  workflow_dispatch:
-
-jobs:
-  pages:
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        python-version: ["3.11"]
-    env:
-      PROJECT: ${{ github.event.repository.name }}
-      REPO_OWNER: ${{ github.repository_owner }}
-      PACKAGE_DIR: "your-project-src"
-      HTML_TITLE: Your Project Title  # Optional: custom title
-      MIN_TAG: v0.0.0             # Optional: minimum version
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0  # Fetch full history to support multi-version builds
-
-      - name: Setup Python ${{ matrix.python-version }}
-        uses: actions/setup-python@master
-        with:
-          python-version: ${{ matrix.python-version }}
-      - name: Install uv
-        uses: astral-sh/setup-uv@v7
-        with:
-          enable-cache: true
-      - name: Install dependencies with uv # Install your project dependencies
-        run: |
-          uv pip install --system --upgrade pip
-          uv pip install --system -e .[all]
-
-      - name: Fetch Data-Juicer Sphinx Template # Pull template to override docs/sphinx_doc, skip custom files
-        run: |
-          set -e
-          echo "Cloning sphinx template..."
-          git clone --depth=1 https://github.com/datajuicer/data-juicer-sphinx.git /tmp/template
-          uv pip install --system -e /tmp/template
-          if [ -d "docs/sphinx_doc/source" ]; then
-            echo "Backing up custom files..."
-            mkdir -p /tmp/custom_files
-            cp -r docs/sphinx_doc/source /tmp/custom_files
-          fi
-          echo "Applying template..."
-          rm -rf docs/sphinx_doc
-          mkdir -p docs
-          cp -r /tmp/template/docs/sphinx_doc docs/
-          echo "Restoring custom files..."
-          cp -rf /tmp/custom_files/source/* docs/sphinx_doc/source
-          echo "Done!"
-      - name: Get git tags
-        run: |
-          git fetch --all --tags
-          git branch -a
-          git tag
-      - name: Build documentation
-        run: |
-          cd docs/sphinx_doc
-          python build_versions.py --tags
-
-      - name: Redirect index.html
-        run: |
-          REPOSITORY_OWNER="${GITHUB_REPOSITORY_OWNER}"
-          cd docs/sphinx_doc
-          cp ./redirect.html build/index.html
-          sed -i "s/\[REPOSITORY_OWNER\]/${REPOSITORY_OWNER}/g" build/index.html
-          sed -i "s/\[PROJECT\]/${PROJECT}/g" build/index.html
-          cp build/index.html build/404.html
-      - name: Upload Documentation
-        uses: actions/upload-artifact@v4
-        with:
-          name: SphinxDoc
-          path: "docs/sphinx_doc/build"
-
-      - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          if: ${{ github.event_name == 'push' && (github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/')) }}
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./docs/sphinx_doc/build
-          cname: your-domain.com  # Optional: if using custom domain
-```
-
-**Enable GitHub Pages**:
-1. Go to repository Settings → Pages
-2. Select `gh-pages` branch as Source
-3. Save and visit `https://your-domain.github.io/your-project/`
+Ready to publish? Continue with [Deploy with GitHub Actions](deployment.md).

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+import json
 import os
 import re
 import shutil
@@ -74,6 +75,11 @@ def copy_docs_source_to(wt_root: Path):
     src = REPO_ROOT / DOCS_REL
     dst = wt_root / DOCS_REL
     dst.parent.mkdir(parents=True, exist_ok=True)
+    # Drop the branch's own source tree first, otherwise files removed from the
+    # current template (e.g. a deleted index page) would survive as orphans and
+    # trigger "document isn't included in any toctree" warnings.
+    if dst.exists():
+        shutil.rmtree(dst, ignore_errors=True)
     print(f"[COPY] {src} -> {dst}")
     shutil.copytree(
         src,
@@ -155,6 +161,14 @@ def copy_markdown_files(wt_root: Path):
                 wt_root / DOCS_REL / "source" / "extra" / asset_rel_path,
                 dirs_exist_ok=True,
             )
+            # Also mirror assets into the source tree at their project-relative
+            # path so Sphinx's image collector can resolve relative image
+            # references (e.g. ![img](imgs/TEST.png)) in collected Markdown.
+            shutil.copytree(
+                wt_root / asset_rel_path,
+                wt_root / DOCS_REL / "source" / asset_rel_path,
+                dirs_exist_ok=True,
+            )
 
 
 def build_one(
@@ -163,26 +177,37 @@ def build_one(
     available_versions: list[str],
     enable_api_doc: bool = True,
     langs: list[str] = None,
+    use_worktree: bool = True,
 ):
-    """Build documentation for a single version/branch"""
+    """Build documentation for a single version/branch.
+
+    With use_worktree=False the current checkout (REPO_ROOT) is built in place
+    (used by --current for PR previews): no worktree creation/cleanup and no
+    template overlay, since the checkout already carries the current source.
+    """
     if langs is None:
         langs = DEFAULT_LANGS
 
-    # Create and setup worktree for the specific git reference
-    wt = WORKTREES_DIR / ref_label
-    ensure_clean_worktree(wt)
-    run(["git", "worktree", "add", "--force", str(wt), ref])
-    maybe_init_submodules(wt)
+    if use_worktree:
+        # Create and setup worktree for the specific git reference
+        wt = WORKTREES_DIR / ref_label
+        ensure_clean_worktree(wt)
+        run(["git", "worktree", "add", "--force", str(wt), ref])
+        maybe_init_submodules(wt)
 
-    # Override docs/sphinx_doc with current repo version for unified templates
-    copy_docs_source_to(wt)
-    copy_markdown_files(wt)
+        # Override docs/sphinx_doc with current repo version for unified templates
+        copy_docs_source_to(wt)
+        copy_markdown_files(wt)
+        wt_root = wt
+    else:
+        wt_root = REPO_ROOT
+        copy_markdown_files(wt_root)
 
-    src = wt / DOCS_REL / "source"
+    src = wt_root / DOCS_REL / "source"
     if not src.exists():
         print(f"[SKIP] {ref_label}: {src} not found")
-        if not KEEP_WORKTREES:
-            run(["git", "worktree", "remove", "--force", str(wt)])
+        if use_worktree and not KEEP_WORKTREES:
+            run(["git", "worktree", "remove", "--force", str(wt_root)])
         return
 
     # Build documentation for each supported language
@@ -199,15 +224,15 @@ def build_one(
         env["AVAILABLE_VERSIONS"] = ",".join(
             available_versions
         )  # All available versions for switcher
-        env["REPO_ROOT"] = str(wt)  # Version-specific code root for autodoc imports
+        env["REPO_ROOT"] = str(wt_root)  # Version-specific code root for autodoc imports
 
         # Generate the API rst files (only if enabled)
         if enable_api_doc:
             api_cmd = [
                 "sphinx-apidoc",
                 "-o",
-                str(wt / DOCS_REL / "source" / "api"),
-                str(wt / PACKAGE_DIR),
+                str(wt_root / DOCS_REL / "source" / "api"),
+                str(wt_root / PACKAGE_DIR),
                 "-t",
                 "_templates",
                 "-e",
@@ -229,8 +254,8 @@ def build_one(
         run(cmd, env=env)
 
     # Cleanup worktree after successful build
-    if not KEEP_WORKTREES:
-        run(["git", "worktree", "remove", "--force", str(wt)])
+    if use_worktree and not KEEP_WORKTREES:
+        run(["git", "worktree", "remove", "--force", str(wt_root)])
         try:
             run(["git", "worktree", "prune"])  # Clean up worktree references
         except Exception:
@@ -246,11 +271,14 @@ def parse_args():
 Example usage:
   %(prog)s                                          # Default: build main branch, API docs enabled
   %(prog)s -A                                       # Disable API documentation generation
-  %(prog)s --tags                                   # Build all valid tags
+  %(prog)s --tags                                   # Build all valid tags plus branches
   %(prog)s --tags v1.5.0 v1.6.0                    # Build only specified tags (skip if not exist)
+  %(prog)s --branches --tags v1.5.0                # Tag-only build ('--branches' without values)
   %(prog)s --branches main dev                      # Build specified branches with all tags
   %(prog)s --branches main dev --languages en zh    # Build with English and Chinese docs
   %(prog)s -l en zh -A                              # Short form: build en/zh docs without API
+  %(prog)s --current preview -A                     # Build the current checkout (PR preview)
+  %(prog)s --emit-versions-json                     # Write build/versions.json and exit
         """,
     )
 
@@ -274,10 +302,29 @@ Example usage:
 
     parser.add_argument(
         "--branches",
-        nargs="+",
-        default=["main"],
+        nargs="*",
+        default=None,
         metavar="BRANCH",
-        help="Specify branch list to build (default: ['main'])",
+        help="Specify branch list to build (default: ['main']). "
+        "Use '--branches' without values to build no branches (tag-only builds).",
+    )
+
+    parser.add_argument(
+        "--current",
+        nargs="?",
+        const="current",
+        default=None,
+        metavar="LABEL",
+        help="Build the current checkout in place (no git worktree), output to "
+        "build/<lang>/<LABEL>/. Intended for PR previews. Optional LABEL "
+        "defaults to 'current'.",
+    )
+
+    parser.add_argument(
+        "--emit-versions-json",
+        action="store_true",
+        help="Write the full version list (main + valid tags) to build/versions.json "
+        "for the runtime version switcher, then exit without building.",
     )
 
     parser.add_argument(
@@ -297,16 +344,41 @@ def main():
     """Main entry point: build documentation for all versions"""
     args = parse_args()
 
+    if args.emit_versions_json:
+        emit_versions_json()
+        return
+
+    if args.current is not None:
+        # Build the current checkout in place (PR preview mode, no worktree)
+        ref = os.environ.get("GITHUB_SHA")
+        if not ref:
+            ref = (
+                subprocess.check_output(
+                    ["git", "rev-parse", "HEAD"], text=True
+                ).strip()
+            )
+        print(f"[BUILD] Building current checkout as '{args.current}' (ref {ref})")
+        build_one(
+            ref,
+            args.current,
+            [args.current],
+            not args.no_api_doc,
+            args.languages,
+            use_worktree=False,
+        )
+        return
+
     print(
         f"[CONFIG] API documentation generation: {'Disabled' if args.no_api_doc else 'Enabled'}"
     )
-    print(f"[CONFIG] Build branches: {args.branches}")
+    branches = args.branches if args.branches is not None else ["main"]
+    print(f"[CONFIG] Build branches: {branches}")
     print(f"[CONFIG] Languages: {args.languages}")
 
     WORKTREES_DIR.mkdir(exist_ok=True)
 
     # Get version list
-    versions = list(args.branches)  # Start with branches specified from command line
+    versions = list(branches)  # Start with branches specified from command line
     tags_to_build = []
 
     # Handle tags parameter
@@ -343,7 +415,7 @@ def main():
     enable_api_doc = not args.no_api_doc
 
     # Build all specified branches
-    for branch in args.branches:
+    for branch in branches:
         print(f"[BUILD] Building branch: {branch}")
         build_one(branch, branch, versions, enable_api_doc, args.languages)
 
@@ -351,6 +423,19 @@ def main():
     for tag in tags_to_build:
         print(f"[BUILD] Building tag: {tag}")
         build_one(tag, tag, versions, enable_api_doc, args.languages)
+
+
+def emit_versions_json():
+    """Write the full version list to build/versions.json for the runtime
+    version switcher: branches (default ['main']) first, then all valid tags
+    sorted by version descending."""
+    tags = get_tags()
+    tags.sort(key=pv.parse, reverse=True)
+    versions = ["main"] + tags
+    out = SITE_DIR / "versions.json"
+    SITE_DIR.mkdir(parents=True, exist_ok=True)
+    out.write_text(json.dumps({"versions": versions}, indent=2), encoding="utf-8")
+    print(f"[WRITE] {out}: {versions}")
 
 
 if __name__ == "__main__":
