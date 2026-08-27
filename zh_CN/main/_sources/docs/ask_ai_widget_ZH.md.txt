@@ -10,7 +10,7 @@ docs/sphinx_doc/source/_static/
 │   ├── ask-ai-ui.js            # UI 渲染和交互
 │   └── ask-ai-widget.js        # 主控制器
 ├── ask-ai-widget.js            # 打包后的单文件（用于生产）
-├── ask-ai-widget.css           # 组件样式（Mintlify 风格，跟随明暗主题）
+├── ask-ai-widget.css           # 组件样式（跟随明暗主题）
 ├── package.json                # Node.js 依赖配置
 └── rollup.config.js            # Rollup 打包配置
 ```

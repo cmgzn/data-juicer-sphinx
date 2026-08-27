@@ -1,6 +1,6 @@
 # Data-Juicer Sphinx 文档模板
 
-这是一个为 Data-Juicer 生态系统设计的统一文档构建模板，基于 Sphinx 和内置的 `data_juicer_theme`（Mintlify 风格自定义主题），提供多版本、多语言文档构建能力，让所有子项目保持一致的文档外观和用户体验。
+这是一个为 Data-Juicer 生态系统设计的统一文档构建模板，基于 Sphinx 和内置的 `data_juicer_theme`（现代风格自定义主题），提供多版本、多语言文档构建能力，让所有子项目保持一致的文档外观和用户体验。
 
 ## 特性
 
@@ -15,7 +15,7 @@
 
 ```
 data-juicer-sphinx/
-├── data_juicer_sphinx_theme/                     # Mintlify 风格 Sphinx 主题包
+├── data_juicer_sphinx_theme/                     # 自定义 Sphinx 主题包
 │   ├── theme.conf / layout.html / search.html    # 主题定义与模板
 │   └── static/                                   # 主题 CSS/JS
 ├── docs/

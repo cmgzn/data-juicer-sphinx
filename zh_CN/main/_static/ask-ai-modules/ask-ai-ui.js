@@ -1,7 +1,7 @@
 /**
  * Ask AI Widget - UI Management Module
  *
- * Mintlify-style UI: bottom floating AI bar, selection tooltip and a
+ * UI: bottom floating AI bar, selection tooltip and a
  * drag-to-resize side panel, integrated with the real Q&A capabilities
  * (streaming responses, thinking mode, tool calls, feedback).
  */
@@ -47,7 +47,7 @@ export class AskAIUI {
   }
 
   /**
-   * Create the widget HTML structure (Mintlify-style)
+   * Create the widget HTML structure
    */
   createWidget() {
     const root = document.createElement('div');
@@ -1088,7 +1088,7 @@ export class AskAIUI {
 
   /**
    * Observe theme changes from the Sphinx theme.
-   * The Mintlify-style widget adapts through CSS variables bound to
+   * The widget adapts through CSS variables bound to
    * html[data-theme], so no class juggling is required; this method is
    * kept for API compatibility.
    */

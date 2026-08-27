@@ -145,6 +145,35 @@
   }
 
   // ==================== Sidebar Collapsible ====================
+  function getSidebarKey(li) {
+    var link = li.querySelector(':scope > a');
+    if (link) return link.getAttribute('href') || link.textContent.trim();
+    return null;
+  }
+
+  function saveSidebarState(nav) {
+    var expanded = [];
+    nav.querySelectorAll('li.has-children.expanded').forEach(function(li) {
+      var key = getSidebarKey(li);
+      if (key) expanded.push(key);
+    });
+    try { sessionStorage.setItem('dj-sidebar-expanded', JSON.stringify(expanded)); } catch(e) {}
+  }
+
+  function restoreSidebarState(nav) {
+    var stored = null;
+    try { stored = sessionStorage.getItem('dj-sidebar-expanded'); } catch(e) {}
+    if (!stored) return;
+    var expanded = JSON.parse(stored);
+    if (!Array.isArray(expanded)) return;
+    nav.querySelectorAll('li.has-children').forEach(function(li) {
+      var key = getSidebarKey(li);
+      if (key && expanded.indexOf(key) !== -1) {
+        li.classList.add('expanded');
+      }
+    });
+  }
+
   function initSidebarCollapse() {
     var nav = document.querySelector('.sidebar-nav');
     if (!nav) return;
@@ -165,13 +194,22 @@
       }
     });
 
+    // Restore previously expanded sections
+    restoreSidebarState(nav);
+
     // Expand current page's ancestor path
     var current = window.location.pathname;
+    var matched = false;
     nav.querySelectorAll('a').forEach(function(link) {
       var href = link.getAttribute('href');
-      if (href && (current.endsWith(href) || current.includes(href.replace('.html', '')))) {
+      if (!href) return;
+      var hrefPath = href.replace('.html', '').replace(/\/index$/, '/');
+      if (current.endsWith(href) || current.includes(hrefPath)) {
         var li = link.closest('li');
-        if (li) li.classList.add('current');
+        if (li && !matched) {
+          li.classList.add('current');
+          matched = true;
+        }
         // Expand all ancestors
         var parent = li;
         while (parent) {
@@ -183,14 +221,17 @@
       }
     });
 
-    // Toggle on click
+    // Toggle on click — persist state
     nav.addEventListener('click', function(e) {
       var toggle = e.target.closest('.toc-toggle');
       if (toggle) {
         e.preventDefault();
         e.stopPropagation();
         var li = toggle.closest('li');
-        if (li) li.classList.toggle('expanded');
+        if (li) {
+          li.classList.toggle('expanded');
+          saveSidebarState(nav);
+        }
       }
     });
   }
@@ -198,6 +239,14 @@
   // ==================== Sidebar Active State ====================
   function initSidebarActive() {
     initSidebarCollapse();
+    // Scroll active item into view
+    var currentItem = document.querySelector('.sidebar-nav li.current > a');
+    if (currentItem) {
+      var sidebar = document.getElementById('sidebar');
+      if (sidebar) {
+        currentItem.scrollIntoView({ block: 'nearest' });
+      }
+    }
   }
 
   // ==================== Search Modal ====================
@@ -365,6 +414,7 @@
 
         var newMain = newDoc.querySelector('main.main-content');
         var newSidebar = newDoc.querySelector('aside.sidebar#sidebar');
+        var newLangDropdown = newDoc.querySelector('#lang-dropdown .dropdown-panel');
         var currentMain = document.querySelector('main.main-content');
         var currentSidebar = document.querySelector('aside.sidebar#sidebar');
 
@@ -381,6 +431,14 @@
 
         if (newSidebar && currentSidebar) {
           currentSidebar.innerHTML = newSidebar.innerHTML;
+        }
+
+        // Update language switcher links for the new page
+        if (newLangDropdown) {
+          var currentLangDropdown = document.querySelector('#lang-dropdown .dropdown-panel');
+          if (currentLangDropdown) {
+            currentLangDropdown.innerHTML = newLangDropdown.innerHTML;
+          }
         }
 
         document.title = newDoc.title;

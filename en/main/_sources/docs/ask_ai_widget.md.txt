@@ -10,7 +10,7 @@ docs/sphinx_doc/source/_static/
 │   ├── ask-ai-ui.js            # UI rendering and interaction
 │   └── ask-ai-widget.js        # Main controller
 ├── ask-ai-widget.js            # Bundled single file (for production)
-├── ask-ai-widget.css           # Widget styles (Mintlify-style, follows light/dark theme)
+├── ask-ai-widget.css           # Widget styles (follows light/dark theme)
 ├── package.json                # Node.js dependency configuration
 └── rollup.config.js            # Rollup bundling configuration
 ```

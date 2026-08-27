@@ -1,6 +1,6 @@
 # Data-Juicer Sphinx Documentation Template
 
-This is a unified documentation build template designed for the Data-Juicer ecosystem. Built on Sphinx and the bundled `data_juicer_theme` (a Mintlify-style custom theme), it provides multi-version and multi-language documentation capabilities, ensuring consistent documentation appearance and user experience across all subprojects.
+This is a unified documentation build template designed for the Data-Juicer ecosystem. Built on Sphinx and the bundled `data_juicer_theme` (a modern custom theme), it provides multi-version and multi-language documentation capabilities, ensuring consistent documentation appearance and user experience across all subprojects.
 
 ## Features
 
@@ -15,7 +15,7 @@ This is a unified documentation build template designed for the Data-Juicer ecos
 
 ```
 data-juicer-sphinx/
-├── data_juicer_sphinx_theme/                    # Mintlify-style Sphinx theme package
+├── data_juicer_sphinx_theme/                    # Custom Sphinx theme package
 │   ├── theme.conf / layout.html / search.html   # Theme definition and templates
 │   └── static/                                  # Theme CSS/JS
 ├── docs/
